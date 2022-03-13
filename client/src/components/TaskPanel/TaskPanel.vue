@@ -10,7 +10,7 @@
         >
           7
         </span>
-        <h3 class="flex-1 pl-2">Panel Name</h3>
+        <h3 class="flex-1 pl-2 font-semibold">Panel Name</h3>
         <add-icon
           class="cursor-pointer items-center flex mx-0.3"
           :size="22"
