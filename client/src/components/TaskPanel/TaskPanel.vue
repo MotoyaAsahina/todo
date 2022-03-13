@@ -11,17 +11,10 @@
           7
         </span>
         <h3 class="flex-1 pl-2 font-semibold">Panel Name</h3>
-        <add-icon
-          class="cursor-pointer items-center flex mx-0.3"
-          :size="22"
-          fill-color="#696969"
-        />
-        <dots-icon
-          class="cursor-pointer items-center flex mx-0.3"
-          :size="22"
-          fill-color="#696969"
-        />
+        <add-icon />
+        <dots-icon class="ml-0.5" />
       </div>
+
       <div
         style="width: 100%; height: calc(100% - 2.5rem)"
         class="px-2 overflow-scroll"
@@ -40,9 +33,9 @@
 </template>
 
 <script>
-import TaskCard from '../TaskCard/TaskCard.vue'
-import DotsIcon from 'vue-material-design-icons/DotsHorizontal.vue'
-import AddIcon from 'vue-material-design-icons/Plus.vue'
+import TaskCard from '/@/components/TaskCard/TaskCard.vue'
+import DotsIcon from '/@/components/UI/DotsHorizontalIcon.vue'
+import AddIcon from '/@/components/UI/AddIcon.vue'
 
 export default {
   name: 'TaskPanel',
