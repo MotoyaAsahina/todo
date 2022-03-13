@@ -12,14 +12,14 @@
         </span>
         <h3 class="flex-1 pl-2">Panel Name</h3>
         <add-icon
-          class="cursor-pointer items-center flex px-0.25"
+          class="cursor-pointer items-center flex mx-0.3"
           :size="22"
-          fill-color="#2c3e50"
+          fill-color="#696969"
         />
         <dots-icon
-          class="cursor-pointer items-center flex px-0.25"
+          class="cursor-pointer items-center flex mx-0.3"
           :size="22"
-          fill-color="#2c3e50"
+          fill-color="#696969"
         />
       </div>
       <div
