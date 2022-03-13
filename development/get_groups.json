@@ -2,11 +2,11 @@
   {
     "id": "0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0a",
     "name": "Group 1",
-    "description": "Group 1 description"
+    "order": 0
   },
   {
     "id": "0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0b",
     "name": "Group 2",
-    "description": "Group 2 description"
+    "order": 1
   }
 ]
