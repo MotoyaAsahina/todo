@@ -207,7 +207,7 @@ export interface Task {
      * @type {string}
      * @memberof Task
      */
-    'done-at': string;
+    'done_at': string;
     /**
      * 
      * @type {Array<string>}

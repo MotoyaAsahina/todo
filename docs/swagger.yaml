@@ -124,7 +124,7 @@ components:
           type: string
         updated_at:
           type: string
-        done-at:
+        done_at:
           type: string
         tags:
           type: array
@@ -139,7 +139,7 @@ components:
         - due_date
         - created_at
         - updated_at
-        - done-at
+        - done_at
         - tags
       example:
         id: "0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0a"
