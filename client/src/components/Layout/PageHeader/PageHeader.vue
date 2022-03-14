@@ -7,7 +7,7 @@
   </header>
 </template>
 
-<script>
+<script lang="ts">
 import AddIcon from '/@/components/UI/AddIcon.vue'
 import OrderIcon from '/@/components/UI/ReorderHorizontalIcon.vue'
 import TagIcon from '/@/components/UI/TagIcon.vue'

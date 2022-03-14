@@ -6,7 +6,7 @@
   />
 </template>
 
-<script>
+<script lang="ts">
 import Icon from 'vue-material-design-icons/Delete.vue'
 
 export default {

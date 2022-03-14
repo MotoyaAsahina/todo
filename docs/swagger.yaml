@@ -1,0 +1,242 @@
+openapi: 3.0.1
+
+info:
+  version: v1
+  title: "todo API"
+  termsOfService: "http://swagger.io/terms/"
+
+servers:
+  - url: "http://localhost:4000/api"
+
+paths:
+  /tasks:
+    get:
+      operationId: getTasks
+      tags:
+        - tasks
+      responses:
+        "200":
+          description: 正常に取得できました
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tasks"
+    post:
+      operationId: postTask
+      tags:
+        - tasks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostTask"
+        required: true
+      responses:
+        "201":
+          description: 正常に作成できました
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+
+  /groups:
+    get:
+      operationId: getGroups
+      tags:
+        - groups
+      responses:
+        "200":
+          description: 正常に取得できました
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Groups"
+    post:
+      operationId: postGroup
+      tags:
+        - groups
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostGroup"
+        required: true
+      responses:
+        "201":
+          description: 正常に作成できました
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Group"
+
+  /tags:
+    get:
+      operationId: getTags
+      tags:
+        - tags
+      responses:
+        "200":
+          description: 正常に取得できました
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tags"
+    post:
+      operationId: postTag
+      tags:
+        - tags
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostTag"
+        required: true
+      responses:
+        "201":
+          description: 正常に作成できました
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tag"
+
+components:
+  schemas:
+    Tasks:
+      type: array
+      items:
+        $ref: "#/components/schemas/Task"
+    Task:
+      type: object
+      properties:
+        id:
+          type: string
+        group-id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        done:
+          type: boolean
+        due-date:
+          type: string
+        created-at:
+          type: string
+        updated-at:
+          type: string
+        done-at:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+      required:
+        - id
+        - group-id
+        - title
+        - description
+        - done
+        - due-date
+        - created-at
+        - updated-at
+        - done-at
+        - tags
+      example:
+        id: "0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0a"
+        group_id: "0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0a"
+        title: "Task 1"
+        description: "Description 1"
+        done: false
+        due_date: "2015-01-01T00:00:00+09:00"
+        created_at: "2015-01-01T00:00:00+09:00"
+        updated_at: "2015-01-01T00:00:00+09:00"
+        done_at: "2015-01-01T00:00:00+09:00"
+        tags:
+          - "0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0a"
+    PostTask:
+      type: object
+      properties:
+        group-id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        due-date:
+          type: string
+      required:
+        - group-id
+        - title
+        - description
+        - due-date
+      example:
+        group_id: "0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0a"
+        title: "Task 1"
+        description: "Description 1"
+        due_date: "2015-01-01T00:00:00+09:00"
+
+    Groups:
+      type: array
+      items:
+        $ref: "#/components/schemas/Group"
+    Group:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        order:
+          type: integer
+      required:
+        - id
+        - name
+        - order
+      example:
+        id: "0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0a"
+        name: "Group 1"
+        order: 0
+    PostGroup:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+        - name
+      example:
+        name: "Group 1"
+
+    Tags:
+      type: array
+      items:
+        $ref: "#/components/schemas/Tag"
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        color:
+          type: string
+      required:
+        - id
+        - name
+        - color
+      example:
+        id: "0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0a"
+        name: "Tag 1"
+        color: "#000000"
+    PostTag:
+      type: object
+      properties:
+        name:
+          type: string
+        color:
+          type: string
+      required:
+        - name
+        - color
+      example:
+        name: "Tag 1"
+        color: "#000000"

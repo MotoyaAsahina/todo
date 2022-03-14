@@ -32,7 +32,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import TaskCard from '/@/components/TaskCard/TaskCard.vue'
 import DotsIcon from '/@/components/UI/DotsHorizontalIcon.vue'
 import AddIcon from '/@/components/UI/AddIcon.vue'

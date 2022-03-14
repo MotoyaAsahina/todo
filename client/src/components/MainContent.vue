@@ -10,8 +10,8 @@
   </div>
 </template>
 
-<script>
-import TaskPanel from './TaskPanel/TaskPanel.vue'
+<script lang="ts">
+import TaskPanel from '/@/components/TaskPanel/TaskPanel.vue'
 
 export default {
   name: 'MainContent',

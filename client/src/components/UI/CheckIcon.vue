@@ -6,7 +6,7 @@
   />
 </template>
 
-<script>
+<script lang="ts">
 import Icon from 'vue-material-design-icons/Check.vue'
 
 export default {

@@ -26,7 +26,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import TaskTag from '/@/components/TaskTag/TaskTag.vue'
 import CheckIcon from '/@/components/UI/CheckIcon.vue'
 import DeleteIcon from '/@/components/UI/DeleteIcon.vue'
