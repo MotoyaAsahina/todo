@@ -11,7 +11,10 @@ node_modules
 dist
 dist-ssr
 *.local
-src/lib/apis/generated
+
+# Generated API scripts
+src/lib/apis/generated/*
+!src/lib/apis/generated/*.ts
 
 # Editor directories and files
 .vscode/*

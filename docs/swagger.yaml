@@ -110,7 +110,7 @@ components:
       properties:
         id:
           type: string
-        group-id:
+        group_id:
           type: string
         title:
           type: string
@@ -118,11 +118,11 @@ components:
           type: string
         done:
           type: boolean
-        due-date:
+        due_date:
           type: string
-        created-at:
+        created_at:
           type: string
-        updated-at:
+        updated_at:
           type: string
         done-at:
           type: string
@@ -132,13 +132,13 @@ components:
             type: string
       required:
         - id
-        - group-id
+        - group_id
         - title
         - description
         - done
-        - due-date
-        - created-at
-        - updated-at
+        - due_date
+        - created_at
+        - updated_at
         - done-at
         - tags
       example:
@@ -156,19 +156,19 @@ components:
     PostTask:
       type: object
       properties:
-        group-id:
+        group_id:
           type: string
         title:
           type: string
         description:
           type: string
-        due-date:
+        due_date:
           type: string
       required:
-        - group-id
+        - group_id
         - title
         - description
-        - due-date
+        - due_date
       example:
         group_id: "0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0a"
         title: "Task 1"

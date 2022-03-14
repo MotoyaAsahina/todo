@@ -1,4 +1,3 @@
-import { AxiosError } from 'axios'
 import { Apis, Configuration } from './generated'
 
 export const apis = new Apis(

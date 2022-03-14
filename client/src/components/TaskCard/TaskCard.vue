@@ -9,10 +9,10 @@
       <delete-icon class="ml-0.5" />
     </div>
 
-    <a class="cursor-pointer font-bold">Task Title</a>
+    <a class="cursor-pointer font-bold">{{ task.title }}</a>
     <div class="flex flex-wrap gap-1 mt-0.6">
-      <p class="mr-1 leading-5">2/24(木) 23:59</p>
-      <task-tag tag-name="priority:HIGH"></task-tag>
+      <p class="mr-1 leading-5">{{ formatDueDate(task.due_date) }}</p>
+      <task-tag v-for="tagID in task.tags" :key="tagID" :tag="findTag(tagID)" />
     </div>
     <p
       class="mt-1.2 text-sm"
@@ -21,22 +21,55 @@
       }"
       @click="cardClick = !cardClick"
     >
-      コメントおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおおお
+      {{ task.description }}
     </p>
   </div>
 </template>
 
 <script lang="ts">
+import { defineComponent, PropType } from 'vue'
+import { Task, Tags } from '/@/lib/apis'
 import TaskTag from '/@/components/TaskTag/TaskTag.vue'
 import CheckIcon from '/@/components/UI/CheckIcon.vue'
 import DeleteIcon from '/@/components/UI/DeleteIcon.vue'
 
-export default {
+export default defineComponent({
   name: 'TaskCard',
   components: {
     TaskTag,
     CheckIcon,
     DeleteIcon
+  },
+  props: {
+    task: {
+      type: Object as PropType<Task>,
+      required: true
+    },
+    tags: {
+      type: Array as PropType<Tags>,
+      required: true
+    }
+  },
+  setup(props) {
+    const formatDueDate = (d: string) => {
+      let date = new Date(d)
+      let year =
+        date.getFullYear() !== new Date().getFullYear()
+          ? `${date.getFullYear()}/`
+          : ''
+      let month = date.getMonth() + 1
+      let day = date.getDate()
+      let weekDay = ['日', '月', '火', '水', '木', '金', '土'][date.getDay()]
+      let hour = ('00' + date.getHours()).slice(-2)
+      let minute = ('00' + date.getMinutes()).slice(-2)
+      return `${year}${month}/${day}(${weekDay}) ${hour}:${minute}`
+    }
+
+    const findTag = (id: string) => {
+      return props.tags?.find(t => t.id === id)
+    }
+
+    return { formatDueDate, findTag }
   },
   data() {
     return {
@@ -44,7 +77,7 @@ export default {
       cardClick: false
     }
   }
-}
+})
 </script>
 
 <style scoped></style>
