@@ -7,19 +7,21 @@
         <span
           class="w-5 h-5 flex-initial rounded-lg bg-gray-200 text-sm text-center"
         >
-          {{ tags?.length }}
+          {{ groups?.length }}
         </span>
-        <h3 class="flex-1 pl-2 font-semibold">Tags</h3>
+        <h3 class="flex-1 pl-2 font-semibold">Groups</h3>
         <add-icon />
       </div>
 
       <div class="h-lg px-2 overflow-scroll">
-        <div v-for="tag in tags" :key="tag.id" class="my-2 px-2">
-          <div class="flex items-center">
-            <task-tag class="w-auto" :tag="tag" />
-            <p class="ml-2">{{ tag.color }}</p>
-          </div>
-          <p>{{ tag.name }}</p>
+        <div
+          v-for="group in groups"
+          :key="group.id"
+          class="my-2 pl-1 pr-2 flex items-center"
+        >
+          <up-arrow-icon :size="18" />
+          <down-arrow-icon :size="18" class="ml-1" />
+          <p class="ml-3">{{ group.name }}</p>
         </div>
       </div>
     </div>
@@ -28,19 +30,21 @@
 
 <script lang="ts">
 import { PropType } from 'vue'
-import { Tags } from '/@/lib/apis'
-import TaskTag from '/@/components/TaskTag/TaskTag.vue'
+import { Groups } from '/@/lib/apis'
 import AddIcon from '/@/components/UI/AddIcon.vue'
+import UpArrowIcon from '/@/components/UI/UpArrowIcon.vue'
+import DownArrowIcon from '/@/components/UI/DownArrowIcon.vue'
 
 export default {
-  name: 'TaskTagEditor',
+  name: 'TaskPanelEditor',
   components: {
-    TaskTag,
-    AddIcon
+    AddIcon,
+    UpArrowIcon,
+    DownArrowIcon
   },
   props: {
-    tags: {
-      type: Array as PropType<Tags>,
+    groups: {
+      type: Array as PropType<Groups>,
       required: true
     }
   }
