@@ -8,5 +8,15 @@
     "id": "0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0b",
     "name": "Group 2",
     "order": 1
+  },
+  {
+    "id": "0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0c",
+    "name": "Group 3",
+    "order": 2
+  },
+  {
+    "id": "0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0d",
+    "name": "Group 4",
+    "order": 3
   }
 ]

@@ -15,6 +15,7 @@
       <task-tag v-for="tagID in task.tags" :key="tagID" :tag="findTag(tagID)" />
     </div>
     <p
+      v-if="task.description?.length > 0"
       class="mt-1.2 text-sm"
       :class="{
         'whitespace-nowrap overflow-hidden overflow-ellipsis': !cardClick
@@ -28,7 +29,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import { Task, Tags } from '/@/lib/apis'
+import { Task, Tags, Tag } from '/@/lib/apis'
 import TaskTag from '/@/components/TaskTag/TaskTag.vue'
 import CheckIcon from '/@/components/UI/CheckIcon.vue'
 import DeleteIcon from '/@/components/UI/DeleteIcon.vue'
@@ -65,8 +66,10 @@ export default defineComponent({
       return `${year}${month}/${day}(${weekDay}) ${hour}:${minute}`
     }
 
-    const findTag = (id: string) => {
-      return props.tags?.find(t => t.id === id)
+    const findTag = (id: string): Tag => {
+      return (
+        props.tags?.find(t => t.id === id) ?? { id: '', name: '', color: '' }
+      )
     }
 
     return { formatDueDate, findTag }

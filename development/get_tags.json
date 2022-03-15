@@ -1,7 +1,47 @@
 [
   {
     "id": "0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0a",
-    "name": "Tag 1",
-    "color": "#ff0000"
+    "name": "priority:HIGH",
+    "color": "#cc3333"
+  },
+  {
+    "id": "0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0b",
+    "name": "priority:LOW",
+    "color": "#d4c5f9"
+  },
+  {
+    "id": "0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0c",
+    "name": "refactoring",
+    "color": "#94e281"
+  },
+  {
+    "id": "0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0d",
+    "name": "UI",
+    "color": "#db701e"
+  },
+  {
+    "id": "0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0e",
+    "name": "enchantment",
+    "color": "#a2eeef"
+  },
+  {
+    "id": "0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0f",
+    "name": "documentation",
+    "color": "#0075ca"
+  },
+  {
+    "id": "0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0g",
+    "name": "feedback",
+    "color": "#ffcec1"
+  },
+  {
+    "id": "0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0h",
+    "name": "message",
+    "color": "#fcee68"
+  },
+  {
+    "id": "0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0i",
+    "name": "heavy",
+    "color": "#342e54"
   }
 ]

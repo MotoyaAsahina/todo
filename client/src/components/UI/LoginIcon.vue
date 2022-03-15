@@ -7,10 +7,10 @@
 </template>
 
 <script lang="ts">
-import Icon from 'vue-material-design-icons/KeyOutline.vue'
+import Icon from 'vue-material-design-icons/Login.vue'
 
 export default {
-  name: 'KeyIcon',
+  name: 'LoginIcon',
   components: {
     Icon
   }

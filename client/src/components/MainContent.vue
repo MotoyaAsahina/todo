@@ -4,7 +4,11 @@
     class="w-full p-2 overflow-scroll flex"
   >
     <template v-for="group in groups" :key="group.id">
-      <task-panel :tasks="tasksByGroup(group)" :group="group" :tags="tags" />
+      <task-panel
+        :tasks="tasksByGroup(group) ?? []"
+        :group="group"
+        :tags="tags ?? []"
+      />
     </template>
   </div>
 </template>
@@ -35,6 +39,7 @@ export default {
       tags.value = res.data
     }
 
+    // TODO: エラーハンドリング
     try {
       fetchGroups()
       fetchTasks()
