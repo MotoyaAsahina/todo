@@ -1,5 +1,5 @@
 <template>
-  <header class="h-14 w-full bg-gray-100 border-b-1 border-gray-300">
+  <header class="h-14 w-full bg-gray-100 border-b-1 border-gray-300 relative">
     <div class="h-full flex items-center px-4">
       <div class="flex-1 text-xl">Todo</div>
       <add-icon />
@@ -7,12 +7,19 @@
       <tag-icon class="ml-1" />
       <a href="login"><login-icon class="ml-2" /></a>
     </div>
+
+    <task-tag-editor
+      v-show="editingTags"
+      class="absolute right-0 top-10"
+      :tags="tags ?? []"
+    />
   </header>
 </template>
 
 <script lang="ts">
 import { ref } from 'vue'
 import { apis, Tags } from '/@/lib/apis'
+import TaskTagEditor from '/@/components/TaskTag/TaskTagEditor.vue'
 import AddIcon from '/@/components/UI/AddIcon.vue'
 import OrderIcon from '/@/components/UI/ReorderHorizontalIcon.vue'
 import TagIcon from '/@/components/UI/TagIcon.vue'
@@ -21,6 +28,7 @@ import LoginIcon from '/@/components/UI/LoginIcon.vue'
 export default {
   name: 'PageHeader',
   components: {
+    TaskTagEditor,
     AddIcon,
     OrderIcon,
     TagIcon,
@@ -42,6 +50,11 @@ export default {
     }
 
     return { tags }
+  },
+  data() {
+    return {
+      editingTags: false
+    }
   }
 }
 </script>
