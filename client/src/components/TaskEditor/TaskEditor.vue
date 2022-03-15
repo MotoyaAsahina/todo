@@ -28,7 +28,7 @@
         </div>
       </div>
       <div class="flex items-center justify-end mt-2">
-        <a><close-icon /></a>
+        <a @click="$emit('close')"><close-icon /></a>
         <a @click="postTask"><check-icon class="ml-0.5" /></a>
       </div>
     </div>
@@ -61,6 +61,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['close'],
   setup(props) {
     const selectingTags: Set<Tag> = new Set()
 

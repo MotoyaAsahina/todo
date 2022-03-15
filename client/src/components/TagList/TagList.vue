@@ -1,5 +1,5 @@
 <template>
-  <head-editor :title="'Tags'" :item-length="tags.length">
+  <header-list :title="'Tags'" :item-length="tags.length">
     <div v-for="tag in tags" :key="tag.id" class="my-2 px-2">
       <div class="flex items-center">
         <task-tag class="w-auto" :tag="tag" />
@@ -7,19 +7,19 @@
       </div>
       <p>{{ tag.name }}</p>
     </div>
-  </head-editor>
+  </header-list>
 </template>
 
 <script lang="ts">
 import { PropType } from 'vue'
 import { Tags } from '/@/lib/apis'
 import TaskTag from '/@/components/TaskTag/TaskTag.vue'
-import HeadEditor from '/@/components/Layout/PageHeader/HeadEditor.vue'
+import HeaderList from '/@/components/Layout/PageHeader/HeaderList.vue'
 
 export default {
-  name: 'TaskTagEditor',
+  name: 'TagList',
   components: {
-    HeadEditor,
+    HeaderList,
     TaskTag
   },
   props: {

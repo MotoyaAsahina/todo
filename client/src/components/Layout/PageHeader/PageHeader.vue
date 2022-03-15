@@ -6,12 +6,12 @@
       <a @click="operateTagEditor"><tag-icon class="ml-1.5" /></a>
     </div>
 
-    <task-tag-editor
+    <tag-list
       v-show="editingTags"
       class="absolute right-0 top-10"
       :tags="tags ?? []"
     />
-    <task-panel-editor
+    <group-list
       v-show="editingGroups"
       class="absolute right-0 top-10"
       :groups="groups ?? []"
@@ -22,16 +22,16 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { apis, Groups, Tags } from '/@/lib/apis'
-import TaskTagEditor from '/@/components/Layout/PageHeader/TaskTagEditor.vue'
-import TaskPanelEditor from '/@/components/Layout/PageHeader/TaskPanelEditor.vue'
+import TagList from '/@/components/TagList/TagList.vue'
+import GroupList from '/@/components/GroupList/GroupList.vue'
 import OrderIcon from '/@/components/UI/ReorderHorizontalIcon.vue'
 import TagIcon from '/@/components/UI/TagIcon.vue'
 
 export default defineComponent({
   name: 'PageHeader',
   components: {
-    TaskTagEditor,
-    TaskPanelEditor,
+    TagList,
+    GroupList,
     OrderIcon,
     TagIcon
   },

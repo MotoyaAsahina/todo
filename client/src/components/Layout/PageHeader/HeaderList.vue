@@ -24,7 +24,7 @@
 import AddIcon from '/@/components/UI/AddIcon.vue'
 
 export default {
-  name: 'HeadEditor',
+  name: 'HeaderList',
   components: {
     AddIcon
   },

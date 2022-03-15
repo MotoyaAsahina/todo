@@ -1,5 +1,5 @@
 <template>
-  <head-editor :title="'Groups'" :item-length="groups.length">
+  <header-list :title="'Groups'" :item-length="groups.length">
     <div
       v-for="group in groups"
       :key="group.id"
@@ -9,20 +9,20 @@
       <down-arrow-icon :size="18" class="ml-1" />
       <p class="ml-3">{{ group.name }}</p>
     </div>
-  </head-editor>
+  </header-list>
 </template>
 
 <script lang="ts">
 import { PropType } from 'vue'
 import { Groups } from '/@/lib/apis'
-import HeadEditor from '/@/components/Layout/PageHeader/HeadEditor.vue'
+import HeaderList from '/@/components/Layout/PageHeader/HeaderList.vue'
 import UpArrowIcon from '/@/components/UI/UpArrowIcon.vue'
 import DownArrowIcon from '/@/components/UI/DownArrowIcon.vue'
 
 export default {
-  name: 'TaskPanelEditor',
+  name: 'GroupList',
   components: {
-    HeadEditor,
+    HeaderList,
     UpArrowIcon,
     DownArrowIcon
   },

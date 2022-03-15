@@ -19,6 +19,7 @@
           class="right-1 top-9 absolute z-8"
           :group="group"
           :tags="tags ?? []"
+          @close="closeEditors"
         />
         <task-panel-menu
           v-show="openingMenu"
