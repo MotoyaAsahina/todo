@@ -2,9 +2,8 @@
   <header class="h-14 w-full bg-gray-100 border-b-1 border-gray-300 relative">
     <div class="h-full flex items-center px-4">
       <div class="flex-1 text-xl">Todo</div>
-      <order-icon />
-      <tag-icon class="ml-1" />
-      <a href="login"><login-icon class="ml-2" /></a>
+      <a @click="operateGroupEditor"><order-icon /></a>
+      <a @click="operateTagEditor"><tag-icon class="ml-1.5" /></a>
     </div>
 
     <task-tag-editor
@@ -13,7 +12,7 @@
       :tags="tags ?? []"
     />
     <task-panel-editor
-      v-show="editingPanels"
+      v-show="editingGroups"
       class="absolute right-0 top-10"
       :groups="groups ?? []"
     />
@@ -21,22 +20,20 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { apis, Groups, Tags } from '/@/lib/apis'
-import TaskTagEditor from '/@/components/TaskTag/TaskTagEditor.vue'
-import TaskPanelEditor from '/@/components/TaskPanel/TaskPanelEditor.vue'
+import TaskTagEditor from '/@/components/Layout/PageHeader/TaskTagEditor.vue'
+import TaskPanelEditor from '/@/components/Layout/PageHeader/TaskPanelEditor.vue'
 import OrderIcon from '/@/components/UI/ReorderHorizontalIcon.vue'
 import TagIcon from '/@/components/UI/TagIcon.vue'
-import LoginIcon from '/@/components/UI/LoginIcon.vue'
 
-export default {
+export default defineComponent({
   name: 'PageHeader',
   components: {
     TaskTagEditor,
     TaskPanelEditor,
     OrderIcon,
-    TagIcon,
-    LoginIcon
+    TagIcon
   },
   setup() {
     const groups = ref<Groups>()
@@ -64,10 +61,26 @@ export default {
   data() {
     return {
       editingTags: false,
-      editingPanels: false
+      editingGroups: false
+    }
+  },
+  methods: {
+    operateTagEditor() {
+      const temp = this.editingTags
+      this.closeEditors()
+      if (!temp) this.editingTags = true
+    },
+    operateGroupEditor() {
+      const temp = this.editingGroups
+      this.closeEditors()
+      if (!temp) this.editingGroups = true
+    },
+    closeEditors() {
+      this.editingTags = false
+      this.editingGroups = false
     }
   }
-}
+})
 </script>
 
 <style scoped></style>
