@@ -5,8 +5,8 @@
     @mouseleave="cardHover = false"
   >
     <div v-show="cardHover" class="absolute top-0 right-0 mr-2 mt-2 flex">
-      <check-icon />
-      <delete-icon class="ml-0.5" />
+      <check-icon class="mr-0.5" />
+      <delete-icon />
     </div>
 
     <a class="cursor-pointer font-bold">{{ task.title }}</a>
