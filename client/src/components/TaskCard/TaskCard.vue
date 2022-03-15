@@ -9,7 +9,9 @@
       <delete-icon />
     </div>
 
-    <a class="cursor-pointer font-bold">{{ task.title }}</a>
+    <a class="cursor-pointer font-bold" @click="$emit('editTask', task)">
+      {{ task.title }}
+    </a>
     <div class="flex flex-wrap gap-1 mt-0.6">
       <p class="mr-1 leading-5">{{ formatDueDate(task.due_date) }}</p>
       <task-tag v-for="tagID in task.tags" :key="tagID" :tag="findTag(tagID)" />
@@ -51,6 +53,7 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['editTask'],
   setup(props) {
     const formatDueDate = (d: string) => {
       let date = new Date(d)

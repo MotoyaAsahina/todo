@@ -19,8 +19,39 @@
           class="right-1 top-9 absolute z-8"
           :group="group"
           :tags="tags ?? []"
-          @close="closeEditors"
-        />
+        >
+          <div class="mb-2">
+            <h3 class="font-semibold">{{ newOrEdit() }} Task</h3>
+          </div>
+          <textarea
+            v-model="rawTaskData"
+            class="w-full resize-none p-1 text-sm"
+            rows="6"
+          ></textarea>
+          <div class="flex flex-wrap items-end gap-1 relative">
+            <a @click="openingTagList = !openingTagList"><tag-icon /></a>
+            <task-tag v-for="tag in selectingTags" :key="tag.id" :tag="tag" />
+
+            <div
+              v-if="openingTagList"
+              class="top-0 left-6 w-60 absolute bg-white rounded-lg border-1 border-gray-300 shadow-md z-10"
+            >
+              <div class="m-2 flex flex-wrap gap-1">
+                <task-tag
+                  v-for="tag in tags"
+                  :key="tag.id"
+                  :tag="tag"
+                  @click="selectTag(tag)"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center justify-end mt-2">
+            <a @click="closeEditors"><close-icon /></a>
+            <a @click="postTask"><check-icon class="ml-0.5" /></a>
+          </div>
+        </task-editor>
+
         <task-panel-menu
           v-show="openingMenu"
           class="right-1 top-9 absolute z-8"
@@ -32,7 +63,7 @@
         class="px-2 overflow-scroll"
       >
         <template v-for="task in tasks" :key="task.id">
-          <task-card :task="task" :tags="tags" />
+          <task-card :task="task" :tags="tags" @edit-task="setEditTask" />
         </template>
       </div>
     </div>
@@ -40,13 +71,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from 'vue'
-import { Group, Tags, Tasks } from '/@/lib/apis'
+import { defineComponent, ref, PropType } from 'vue'
+import { apis, Group, Tag, Tags, Task, Tasks } from '/@/lib/apis'
 import TaskCard from '/@/components/TaskCard/TaskCard.vue'
 import DotsIcon from '/@/components/UI/DotsHorizontalIcon.vue'
 import AddIcon from '/@/components/UI/AddIcon.vue'
 import TaskEditor from '/@/components/TaskEditor/TaskEditor.vue'
 import TaskPanelMenu from '/@/components/TaskPanelMenu/TaskPanelMenu.vue'
+import TaskTag from '/@/components/TaskTag/TaskTag.vue'
+import CheckIcon from '/@/components/UI/CheckIcon.vue'
+import CloseIcon from '/@/components/UI/CloseIcon.vue'
+import TagIcon from '/@/components/UI/TagIcon.vue'
 
 export default defineComponent({
   name: 'TaskPanel',
@@ -55,7 +90,11 @@ export default defineComponent({
     TaskEditor,
     TaskCard,
     DotsIcon,
-    AddIcon
+    AddIcon,
+    TaskTag,
+    CheckIcon,
+    CloseIcon,
+    TagIcon
   },
   props: {
     group: {
@@ -71,26 +110,96 @@ export default defineComponent({
       required: true
     }
   },
-  data() {
-    return {
-      openingMenu: false,
-      editingTask: false
+  setup(props) {
+    const openingMenu = ref(false)
+    const editing = ref(false)
+
+    const editingTask = ref<Task | null>(null)
+    const isNew = ref(false)
+
+    const operateTaskEditor = () => {
+      const temp = editing.value
+      if (temp && !editingTask.value) closeEditors()
+      if (!temp) {
+        editing.value = true
+      }
+      isNew.value = true
+      editingTask.value = null
+      rawTaskData.value = ''
+      selectingTags.clear()
     }
-  },
-  methods: {
-    operateTaskEditor() {
-      const temp = this.editingTask
-      this.closeEditors()
-      if (!temp) this.editingTask = true
-    },
-    operateMenu() {
-      const temp = this.openingMenu
-      this.closeEditors()
-      if (!temp) this.openingMenu = true
-    },
-    closeEditors() {
-      this.editingTask = false
-      this.openingMenu = false
+    const operateMenu = () => {
+      const temp = openingMenu.value
+      closeEditors()
+      if (!temp) openingMenu.value = true
+    }
+    const closeEditors = () => {
+      editing.value = false
+      openingMenu.value = false
+    }
+
+    const newOrEdit = () => (isNew.value ? 'New' : 'Edit')
+
+    const setEditTask = (task: Task) => {
+      closeEditors()
+      isNew.value = false
+      editing.value = true
+      editingTask.value = task
+      rawTaskData.value = `${task.title}\n${task.due_date}\n${task.description}`
+      selectingTags.clear()
+      for (const tagID of task.tags) {
+        selectingTags.add(
+          props.tags.find(t => t.id === tagID) ?? {
+            id: '',
+            name: '',
+            color: ''
+          }
+        )
+      }
+    }
+
+    let selectingTags: Set<Tag> = new Set()
+    const openingTagList = ref(false)
+
+    const selectTag = (tag: Tag) => {
+      if (selectingTags.has(tag)) {
+        selectingTags.delete(tag)
+      } else {
+        selectingTags.add(tag)
+      }
+    }
+
+    const rawTaskData = ref('')
+
+    const postTask = async () => {
+      let rawData = rawTaskData.value.split('\n')
+      if (rawData.length < 2 || rawData[0] === '' || rawData[1] === '') return
+      if (isNew.value) {
+        await apis.postTask({
+          group_id: props.group.id,
+          title: rawData[0] ?? '',
+          description: rawData[2] ?? '',
+          due_date: rawData[1] ?? '',
+          tags: [...selectingTags].map(tag => tag.id)
+        })
+      } else {
+        // Update
+      }
+    }
+
+    return {
+      openingMenu,
+      editingTask: editing,
+      operateTaskEditor,
+      operateMenu,
+      closeEditors,
+      newOrEdit,
+      setEditTask,
+      openingTagList,
+      selectingTags,
+      selectTag,
+      rawTaskData,
+      postTask
     }
   }
 })
