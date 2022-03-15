@@ -115,6 +115,12 @@ export interface PostTask {
      * @memberof PostTask
      */
     'due_date': string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof PostTask
+     */
+    'tags': Array<string>;
 }
 /**
  * 

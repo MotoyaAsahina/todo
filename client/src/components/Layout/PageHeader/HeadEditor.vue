@@ -1,5 +1,5 @@
 <template>
-  <div class="w-sm max-w-full z-10 p-2">
+  <div class="w-sm max-w-full z-20 p-2">
     <div class="rounded-lg border-1 border-gray-300 bg-white shadow-md">
       <div
         class="mt-2.5 pb-1.5 px-3 flex items-center border-b-1 border-gray-300"

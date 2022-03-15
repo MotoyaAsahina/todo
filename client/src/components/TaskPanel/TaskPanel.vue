@@ -14,7 +14,12 @@
         <a @click="operateTaskEditor"><add-icon /></a>
         <a @click="operateMenu"><dots-icon class="ml-0.5" /></a>
 
-        <task-editor v-show="editingTask" class="right-1 top-9 absolute z-8" />
+        <task-editor
+          v-show="editingTask"
+          class="right-1 top-9 absolute z-8"
+          :group="group"
+          :tags="tags ?? []"
+        />
         <task-panel-menu
           v-show="openingMenu"
           class="right-1 top-9 absolute z-8"

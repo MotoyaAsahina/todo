@@ -164,16 +164,23 @@ components:
           type: string
         due_date:
           type: string
+        tags:
+          type: array
+          items:
+            type: string
       required:
         - group_id
         - title
         - description
         - due_date
+        - tags
       example:
         group_id: "0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0a"
         title: "Task 1"
         description: "Description 1"
         due_date: "2015-01-01T00:00:00+09:00"
+        tags:
+          - "0a0a0a0a-0a0a-0a0a-0a0a-0a0a0a0a0a0a"
 
     Groups:
       type: array
