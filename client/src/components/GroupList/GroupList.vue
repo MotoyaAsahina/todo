@@ -14,9 +14,12 @@
             <h3 class="font-semibold">{{ newOrEdit() }}</h3>
           </div>
           <textarea
+            id="group-list-editor-input"
             v-model="rawData"
             class="w-full resize-none p-1 text-sm"
             rows="3"
+            @keydown.meta.enter="postGroup"
+            @keydown.esc="closeEditor"
           ></textarea>
           <div class="flex items-center justify-end mt-2">
             <a @click="editing = false"><close-icon /></a>
@@ -92,6 +95,9 @@ export default defineComponent({
         rawData.value = ''
       }
       editing.value = true
+      window.setTimeout(function () {
+        document.getElementById('group-list-editor-input')?.focus()
+      }, 10)
     }
 
     const postGroup = async () => {
@@ -120,7 +126,15 @@ export default defineComponent({
       rawData.value = ''
     }
 
-    return { rawData, editing, isNew, newOrEdit, setEditGroup, postGroup }
+    return {
+      rawData,
+      editing,
+      isNew,
+      newOrEdit,
+      setEditGroup,
+      postGroup,
+      closeEditor
+    }
   }
 })
 </script>

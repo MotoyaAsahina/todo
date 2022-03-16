@@ -19,11 +19,14 @@
           class="right-1 top-9 absolute z-8"
           :group="group"
           :tags="tags ?? []"
+          @keydown.meta.enter="postTask"
+          @keydown.esc="closeEditors"
         >
           <div class="mb-2">
             <h3 class="font-semibold">{{ newOrEdit() }} Task</h3>
           </div>
           <textarea
+            :id="`task-editor-input-${group.id}`"
             v-model="rawTaskData"
             class="w-full resize-none p-1 text-sm"
             rows="6"
@@ -128,6 +131,9 @@ export default defineComponent({
       editingTask.value = null
       rawTaskData.value = ''
       selectingTags.clear()
+      window.setTimeout(function () {
+        document.getElementById(`task-editor-input-${props.group.id}`)?.focus()
+      }, 10)
     }
     const operateMenu = () => {
       const temp = openingMenu.value
@@ -159,6 +165,9 @@ export default defineComponent({
           )
         }
       }
+      window.setTimeout(function () {
+        document.getElementById(`task-editor-input-${props.group.id}`)?.focus()
+      }, 10)
     }
 
     let selectingTags: Set<Tag> = new Set()

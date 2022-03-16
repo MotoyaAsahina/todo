@@ -22,7 +22,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { apis, Groups, Tags } from '/@/lib/apis'
-import { addRefreshListener, addRefreshVoidListener } from '/@/lib/refresh'
+import { addRefreshListener } from '/@/lib/refresh'
 import TagList from '/@/components/TagList/TagList.vue'
 import GroupList from '/@/components/GroupList/GroupList.vue'
 import OrderIcon from '/@/components/UI/ReorderHorizontalIcon.vue'
@@ -76,8 +76,6 @@ export default defineComponent({
       editingTags.value = false
       editingGroups.value = false
     }
-
-    // addRefreshVoidListener(closeEditors)
 
     return {
       groups,

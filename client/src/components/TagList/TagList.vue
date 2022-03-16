@@ -14,9 +14,12 @@
             <h3 class="font-semibold">{{ newOrEdit() }}</h3>
           </div>
           <textarea
+            id="tag-list-editor-input"
             v-model="rawData"
             class="w-full resize-none p-1 text-sm"
             rows="3"
+            @keydown.meta.enter="postTag"
+            @keydown.esc="closeEditor"
           ></textarea>
           <div class="flex items-center justify-end mt-2">
             <a @click="editing = false"><close-icon /></a>
@@ -90,6 +93,9 @@ export default defineComponent({
         rawData.value = ''
       }
       editing.value = true
+      window.setTimeout(function () {
+        document.getElementById('tag-list-editor-input')?.focus()
+      }, 10)
     }
 
     const postTag = async () => {
@@ -119,7 +125,15 @@ export default defineComponent({
       rawData.value = ''
     }
 
-    return { rawData, editing, isNew, newOrEdit, setEditTag, postTag }
+    return {
+      rawData,
+      editing,
+      isNew,
+      newOrEdit,
+      setEditTag,
+      postTag,
+      closeEditor
+    }
   }
 })
 </script>
