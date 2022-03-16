@@ -147,14 +147,16 @@ export default defineComponent({
       editingTask.value = task
       rawTaskData.value = `${task.title}\n${task.due_date}\n${task.description}`
       selectingTags.clear()
-      for (const tagID of task.tags) {
-        selectingTags.add(
-          props.tags.find(t => t.id === tagID) ?? {
-            id: '',
-            name: '',
-            color: ''
-          }
-        )
+      if (task.tags?.length > 0) {
+        for (const tagID of task.tags) {
+          selectingTags.add(
+            props.tags.find(t => t.id === tagID) ?? {
+              id: '',
+              name: '',
+              color: ''
+            }
+          )
+        }
       }
     }
 

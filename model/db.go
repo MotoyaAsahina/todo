@@ -11,7 +11,12 @@ import (
 
 var (
 	db     *gorm.DB
-	tables = []interface{}{}
+	tables = []interface{}{
+		&Group{},
+		&Tag{},
+		&Task{},
+		&TagMap{},
+	}
 )
 
 func InitDB() {
