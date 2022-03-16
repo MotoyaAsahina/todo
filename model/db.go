@@ -16,6 +16,7 @@ var (
 		&Tag{},
 		&Task{},
 		&TagMap{},
+		&Token{},
 	}
 )
 

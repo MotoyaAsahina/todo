@@ -15,6 +15,10 @@ services:
       MARIADB_PASSWORD: password
       MARIADB_HOSTNAME: mysql
       MARIADB_DATABASE: todo
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GOOGLE_REDIRECT_URL: ${GOOGLE_REDIRECT_URL}
+      WHITE_LIST: ${WHITE_LIST}
       TZ: Asia/Tokyo
     ports:
       - "4002:4002"
