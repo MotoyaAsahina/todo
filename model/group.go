@@ -13,7 +13,7 @@ type Group struct {
 
 func GetGroups(ctx context.Context) ([]*Group, error) {
 	var groups []*Group
-	err := GetDB(ctx).Find(&groups).Order("order").Error
+	err := GetDB(ctx).Order("`order`").Find(&groups).Error
 	return groups, err
 }
 

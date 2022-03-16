@@ -167,7 +167,18 @@ func isRegisteredTag(tagID uuid.UUID, registeredTags []uuid.UUID) bool {
 }
 
 func DeleteTask(c echo.Context) error {
-	return c.JSON(200, "DeleteTasks")
+	id := uuid.MustParse(c.Param("id"))
+
+	err := model.DeleteTagMapsByTaskID(c.Request().Context(), id)
+	if err != nil {
+		return err
+	}
+
+	err = model.DeleteTask(c.Request().Context(), id)
+	if err != nil {
+		return err
+	}
+	return c.JSON(200, nil)
 }
 
 func PutTaskDone(c echo.Context) error {

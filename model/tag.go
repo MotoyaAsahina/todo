@@ -3,7 +3,6 @@ package model
 import (
 	"context"
 	"github.com/google/uuid"
-	"sort"
 )
 
 type Tag struct {
@@ -22,7 +21,7 @@ type TagMap struct {
 
 func GetTags(ctx context.Context) ([]Tag, error) {
 	var tags []Tag
-	err := GetDB(ctx).Find(&tags).Error
+	err := GetDB(ctx).Order("name").Find(&tags).Error
 	return tags, err
 }
 
@@ -49,12 +48,6 @@ func GetTagMaps(ctx context.Context) (map[uuid.UUID][]uuid.UUID, error) {
 		tagMap[t.TaskID] = append(tagMap[t.TaskID], t.TagID)
 	}
 
-	for taskID := range tagMap {
-		sort.Slice(tagMap[taskID], func(i, j int) bool {
-			return tagMap[taskID][i].String() < tagMap[taskID][j].String()
-		})
-	}
-
 	return tagMap, err
 }
 
@@ -74,4 +67,8 @@ func PostTagMaps(ctx context.Context, tagMap []*TagMap) error {
 
 func DeleteTagMaps(ctx context.Context, tagMap []*TagMap) error {
 	return GetDB(ctx).Delete(tagMap).Error
+}
+
+func DeleteTagMapsByTaskID(ctx context.Context, taskID uuid.UUID) error {
+	return GetDB(ctx).Where("task_id = ?", taskID).Delete(TagMap{}).Error
 }

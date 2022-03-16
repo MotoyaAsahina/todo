@@ -21,7 +21,7 @@ type Task struct {
 
 func GetTasks(ctx context.Context) ([]*Task, error) {
 	var tasks []*Task
-	err := GetDB(ctx).Model(&Task{}).Where("done = ?", false).Find(&tasks).Error
+	err := GetDB(ctx).Model(&Task{}).Where("done = ?", false).Order("due_date").Find(&tasks).Error
 	return tasks, err
 }
 
@@ -48,4 +48,9 @@ func PostTask(ctx context.Context, task *Task) (*Task, error) {
 		return nil, err
 	}
 	return task, nil
+}
+
+func DeleteTask(ctx context.Context, id uuid.UUID) error {
+	err := GetDB(ctx).Delete(&Task{ID: id}).Error
+	return err
 }
