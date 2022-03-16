@@ -64,13 +64,18 @@ func PostTask(c echo.Context) error {
 		return err
 	}
 
+	dueDate, err := parseDueDate(req.DueDate)
+	if err != nil {
+		return err
+	}
+
 	task, err := model.PostTask(c.Request().Context(), &model.Task{
 		ID:          uuid.New(),
 		GroupID:     req.GroupID,
 		Title:       req.Title,
 		Description: req.Description,
 		Done:        false,
-		DueDate:     time.Now(), // TODO: parse
+		DueDate:     dueDate,
 	})
 
 	// tag map
@@ -131,11 +136,16 @@ func PutTask(c echo.Context) error {
 		}
 	}
 
+	dueDate, err := parseDueDate(req.DueDate)
+	if err != nil {
+		return err
+	}
+
 	err = model.PutTask(c.Request().Context(), &model.Task{
 		ID:          id,
 		Title:       req.Title,
 		Description: req.Description,
-		DueDate:     time.Now(),
+		DueDate:     dueDate,
 	})
 	if err != nil {
 		return err
