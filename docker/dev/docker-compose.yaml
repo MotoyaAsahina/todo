@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  app:
+    build:
+      context: ../..
+      dockerfile: docker/dev/Dockerfile
+    container_name: todo_dev_app
+    entrypoint: dockerize -timeout 60s -wait tcp://mysql:3306
+    command: air -c docker/dev/.air.toml
+    environment:
+      PRODUCTION: "false"
+      GO111MODULE: "on"
+      MARIADB_USERNAME: root
+      MARIADB_PASSWORD: password
+      MARIADB_HOSTNAME: mysql
+      MARIADB_DATABASE: todo
+      TZ: Asia/Tokyo
+    ports:
+      - "4002:4002"
+    depends_on:
+      - mysql
+    volumes:
+      - ../../:/go/src/github.com/MotoyaAsahina/todo/
+
+  mysql:
+    image: mariadb:10.3.9
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: todo
+    expose:
+      - "3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    environment:
+      - PMA_HOST=mysql
+      - PMA_USER=root
+      - PMA_PASSWORD=password
+    links:
+      - mysql
+    ports:
+      - "8006:80"
+    volumes:
+      - ./phpmyadmin/sessions:/sessions
