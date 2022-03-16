@@ -39,6 +39,55 @@ paths:
               schema:
                 $ref: "#/components/schemas/Task"
 
+  /tasks/{id}:
+    parameters:
+      - $ref: "#/components/parameters/id"
+    put:
+      operationId: putTask
+      tags:
+        - tasks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostTask"
+        required: true
+      responses:
+        "200":
+          description: 正常に更新できました
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Task"
+    delete:
+      operationId: deleteTask
+      tags:
+        - tasks
+      responses:
+        "204":
+          description: 正常に削除できました
+
+  /tasks/{id}/done:
+    parameters:
+      - $ref: "#/components/parameters/id"
+    put:
+      operationId: putTaskDone
+      tags:
+        - tasks
+      responses:
+        "204":
+          description: 正常に更新できました
+  /tasks/{id}/undone:
+    parameters:
+      - $ref: "#/components/parameters/id"
+    put:
+      operationId: putTaskUndone
+      tags:
+        - tasks
+      responses:
+        "204":
+          description: 正常に更新できました
+
   /groups:
     get:
       operationId: getGroups
@@ -68,6 +117,34 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Group"
+
+  /groups/{id}:
+    parameters:
+      - $ref: "#/components/parameters/id"
+    put:
+      operationId: putGroup
+      tags:
+        - groups
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostGroup"
+        required: true
+      responses:
+        "200":
+          description: 正常に更新できました
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Group"
+    delete:
+      operationId: deleteGroup
+      tags:
+        - groups
+      responses:
+        "204":
+          description: 正常に削除できました
 
   /tags:
     get:
@@ -99,7 +176,44 @@ paths:
               schema:
                 $ref: "#/components/schemas/Tag"
 
+  /tags/{id}:
+    parameters:
+      - $ref: "#/components/parameters/id"
+    put:
+      operationId: putTag
+      tags:
+        - tags
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostTag"
+        required: true
+      responses:
+        "200":
+          description: 正常に更新できました
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tag"
+    delete:
+      operationId: deleteTag
+      tags:
+        - tags
+      responses:
+        "204":
+          description: 正常に削除できました
+
 components:
+  parameters:
+    id:
+      name: id
+      in: path
+      description: ID
+      required: true
+      schema:
+        type: string
+        format: uuid
   schemas:
     Tasks:
       type: array

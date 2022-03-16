@@ -237,6 +237,39 @@ export const GroupsApiAxiosParamCreator = function (configuration?: Configuratio
     return {
         /**
          * 
+         * @param {string} id ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteGroup: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteGroup', 'id', id)
+            const localVarPath = `/groups/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -299,6 +332,45 @@ export const GroupsApiAxiosParamCreator = function (configuration?: Configuratio
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} id ID
+         * @param {PostGroup} postGroup 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putGroup: async (id: string, postGroup: PostGroup, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('putGroup', 'id', id)
+            // verify required parameter 'postGroup' is not null or undefined
+            assertParamExists('putGroup', 'postGroup', postGroup)
+            const localVarPath = `/groups/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(postGroup, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -309,6 +381,16 @@ export const GroupsApiAxiosParamCreator = function (configuration?: Configuratio
 export const GroupsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = GroupsApiAxiosParamCreator(configuration)
     return {
+        /**
+         * 
+         * @param {string} id ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteGroup(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteGroup(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
         /**
          * 
          * @param {*} [options] Override http request option.
@@ -328,6 +410,17 @@ export const GroupsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postGroup(postGroup, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {string} id ID
+         * @param {PostGroup} postGroup 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async putGroup(id: string, postGroup: PostGroup, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Group>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putGroup(id, postGroup, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -338,6 +431,15 @@ export const GroupsApiFp = function(configuration?: Configuration) {
 export const GroupsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = GroupsApiFp(configuration)
     return {
+        /**
+         * 
+         * @param {string} id ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteGroup(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteGroup(id, options).then((request) => request(axios, basePath));
+        },
         /**
          * 
          * @param {*} [options] Override http request option.
@@ -355,6 +457,16 @@ export const GroupsApiFactory = function (configuration?: Configuration, basePat
         postGroup(postGroup: PostGroup, options?: any): AxiosPromise<Group> {
             return localVarFp.postGroup(postGroup, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {string} id ID
+         * @param {PostGroup} postGroup 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putGroup(id: string, postGroup: PostGroup, options?: any): AxiosPromise<Group> {
+            return localVarFp.putGroup(id, postGroup, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -365,6 +477,17 @@ export const GroupsApiFactory = function (configuration?: Configuration, basePat
  * @extends {BaseAPI}
  */
 export class GroupsApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} id ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupsApi
+     */
+    public deleteGroup(id: string, options?: AxiosRequestConfig) {
+        return GroupsApiFp(this.configuration).deleteGroup(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {*} [options] Override http request option.
@@ -385,6 +508,18 @@ export class GroupsApi extends BaseAPI {
     public postGroup(postGroup: PostGroup, options?: AxiosRequestConfig) {
         return GroupsApiFp(this.configuration).postGroup(postGroup, options).then((request) => request(this.axios, this.basePath));
     }
+
+    /**
+     * 
+     * @param {string} id ID
+     * @param {PostGroup} postGroup 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupsApi
+     */
+    public putGroup(id: string, postGroup: PostGroup, options?: AxiosRequestConfig) {
+        return GroupsApiFp(this.configuration).putGroup(id, postGroup, options).then((request) => request(this.axios, this.basePath));
+    }
 }
 
 
@@ -394,6 +529,39 @@ export class GroupsApi extends BaseAPI {
  */
 export const TagsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @param {string} id ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteTag: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteTag', 'id', id)
+            const localVarPath = `/tags/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 
          * @param {*} [options] Override http request option.
@@ -458,6 +626,45 @@ export const TagsApiAxiosParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} id ID
+         * @param {PostTag} postTag 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putTag: async (id: string, postTag: PostTag, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('putTag', 'id', id)
+            // verify required parameter 'postTag' is not null or undefined
+            assertParamExists('putTag', 'postTag', postTag)
+            const localVarPath = `/tags/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(postTag, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -468,6 +675,16 @@ export const TagsApiAxiosParamCreator = function (configuration?: Configuration)
 export const TagsApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = TagsApiAxiosParamCreator(configuration)
     return {
+        /**
+         * 
+         * @param {string} id ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteTag(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteTag(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
         /**
          * 
          * @param {*} [options] Override http request option.
@@ -487,6 +704,17 @@ export const TagsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postTag(postTag, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {string} id ID
+         * @param {PostTag} postTag 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async putTag(id: string, postTag: PostTag, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Tag>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putTag(id, postTag, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -497,6 +725,15 @@ export const TagsApiFp = function(configuration?: Configuration) {
 export const TagsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = TagsApiFp(configuration)
     return {
+        /**
+         * 
+         * @param {string} id ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteTag(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteTag(id, options).then((request) => request(axios, basePath));
+        },
         /**
          * 
          * @param {*} [options] Override http request option.
@@ -514,6 +751,16 @@ export const TagsApiFactory = function (configuration?: Configuration, basePath?
         postTag(postTag: PostTag, options?: any): AxiosPromise<Tag> {
             return localVarFp.postTag(postTag, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {string} id ID
+         * @param {PostTag} postTag 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putTag(id: string, postTag: PostTag, options?: any): AxiosPromise<Tag> {
+            return localVarFp.putTag(id, postTag, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -524,6 +771,17 @@ export const TagsApiFactory = function (configuration?: Configuration, basePath?
  * @extends {BaseAPI}
  */
 export class TagsApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} id ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TagsApi
+     */
+    public deleteTag(id: string, options?: AxiosRequestConfig) {
+        return TagsApiFp(this.configuration).deleteTag(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {*} [options] Override http request option.
@@ -544,6 +802,18 @@ export class TagsApi extends BaseAPI {
     public postTag(postTag: PostTag, options?: AxiosRequestConfig) {
         return TagsApiFp(this.configuration).postTag(postTag, options).then((request) => request(this.axios, this.basePath));
     }
+
+    /**
+     * 
+     * @param {string} id ID
+     * @param {PostTag} postTag 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TagsApi
+     */
+    public putTag(id: string, postTag: PostTag, options?: AxiosRequestConfig) {
+        return TagsApiFp(this.configuration).putTag(id, postTag, options).then((request) => request(this.axios, this.basePath));
+    }
 }
 
 
@@ -553,6 +823,39 @@ export class TagsApi extends BaseAPI {
  */
 export const TasksApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 
+         * @param {string} id ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteTask: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteTask', 'id', id)
+            const localVarPath = `/tasks/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 
          * @param {*} [options] Override http request option.
@@ -617,6 +920,111 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} id ID
+         * @param {PostTask} postTask 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putTask: async (id: string, postTask: PostTask, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('putTask', 'id', id)
+            // verify required parameter 'postTask' is not null or undefined
+            assertParamExists('putTask', 'postTask', postTask)
+            const localVarPath = `/tasks/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(postTask, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putTaskDone: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('putTaskDone', 'id', id)
+            const localVarPath = `/tasks/{id}/done`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putTaskUndone: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('putTaskUndone', 'id', id)
+            const localVarPath = `/tasks/{id}/undone`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -627,6 +1035,16 @@ export const TasksApiAxiosParamCreator = function (configuration?: Configuration
 export const TasksApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = TasksApiAxiosParamCreator(configuration)
     return {
+        /**
+         * 
+         * @param {string} id ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteTask(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteTask(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
         /**
          * 
          * @param {*} [options] Override http request option.
@@ -646,6 +1064,37 @@ export const TasksApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.postTask(postTask, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {string} id ID
+         * @param {PostTask} postTask 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async putTask(id: string, postTask: PostTask, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Task>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putTask(id, postTask, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async putTaskDone(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putTaskDone(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async putTaskUndone(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putTaskUndone(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -656,6 +1105,15 @@ export const TasksApiFp = function(configuration?: Configuration) {
 export const TasksApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     const localVarFp = TasksApiFp(configuration)
     return {
+        /**
+         * 
+         * @param {string} id ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteTask(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteTask(id, options).then((request) => request(axios, basePath));
+        },
         /**
          * 
          * @param {*} [options] Override http request option.
@@ -673,6 +1131,34 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
         postTask(postTask: PostTask, options?: any): AxiosPromise<Task> {
             return localVarFp.postTask(postTask, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {string} id ID
+         * @param {PostTask} postTask 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putTask(id: string, postTask: PostTask, options?: any): AxiosPromise<Task> {
+            return localVarFp.putTask(id, postTask, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putTaskDone(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.putTaskDone(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putTaskUndone(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.putTaskUndone(id, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -683,6 +1169,17 @@ export const TasksApiFactory = function (configuration?: Configuration, basePath
  * @extends {BaseAPI}
  */
 export class TasksApi extends BaseAPI {
+    /**
+     * 
+     * @param {string} id ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TasksApi
+     */
+    public deleteTask(id: string, options?: AxiosRequestConfig) {
+        return TasksApiFp(this.configuration).deleteTask(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @param {*} [options] Override http request option.
@@ -703,9 +1200,54 @@ export class TasksApi extends BaseAPI {
     public postTask(postTask: PostTask, options?: AxiosRequestConfig) {
         return TasksApiFp(this.configuration).postTask(postTask, options).then((request) => request(this.axios, this.basePath));
     }
+
+    /**
+     * 
+     * @param {string} id ID
+     * @param {PostTask} postTask 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TasksApi
+     */
+    public putTask(id: string, postTask: PostTask, options?: AxiosRequestConfig) {
+        return TasksApiFp(this.configuration).putTask(id, postTask, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TasksApi
+     */
+    public putTaskDone(id: string, options?: AxiosRequestConfig) {
+        return TasksApiFp(this.configuration).putTaskDone(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TasksApi
+     */
+    public putTaskUndone(id: string, options?: AxiosRequestConfig) {
+        return TasksApiFp(this.configuration).putTaskUndone(id, options).then((request) => request(this.axios, this.basePath));
+    }
 }
 
 export class Apis extends BaseAPI {
+    /**
+     *
+     * @param {string} id ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupsApi
+     */
+    public deleteGroup(id: string, options?: AxiosRequestConfig) {
+        return GroupsApiFp(this.configuration).deleteGroup(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      *
      * @param {*} [options] Override http request option.
@@ -725,6 +1267,29 @@ export class Apis extends BaseAPI {
      */
     public postGroup(postGroup: PostGroup, options?: AxiosRequestConfig) {
         return GroupsApiFp(this.configuration).postGroup(postGroup, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @param {string} id ID
+     * @param {PostGroup} postGroup
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupsApi
+     */
+    public putGroup(id: string, postGroup: PostGroup, options?: AxiosRequestConfig) {
+        return GroupsApiFp(this.configuration).putGroup(id, postGroup, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @param {string} id ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TagsApi
+     */
+    public deleteTag(id: string, options?: AxiosRequestConfig) {
+        return TagsApiFp(this.configuration).deleteTag(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -750,6 +1315,29 @@ export class Apis extends BaseAPI {
 
     /**
      *
+     * @param {string} id ID
+     * @param {PostTag} postTag
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TagsApi
+     */
+    public putTag(id: string, postTag: PostTag, options?: AxiosRequestConfig) {
+        return TagsApiFp(this.configuration).putTag(id, postTag, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @param {string} id ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TasksApi
+     */
+    public deleteTask(id: string, options?: AxiosRequestConfig) {
+        return TasksApiFp(this.configuration).deleteTask(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TasksApi
@@ -767,5 +1355,39 @@ export class Apis extends BaseAPI {
      */
     public postTask(postTask: PostTask, options?: AxiosRequestConfig) {
         return TasksApiFp(this.configuration).postTask(postTask, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @param {string} id ID
+     * @param {PostTask} postTask
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TasksApi
+     */
+    public putTask(id: string, postTask: PostTask, options?: AxiosRequestConfig) {
+        return TasksApiFp(this.configuration).putTask(id, postTask, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @param {string} id ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TasksApi
+     */
+    public putTaskDone(id: string, options?: AxiosRequestConfig) {
+        return TasksApiFp(this.configuration).putTaskDone(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @param {string} id ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TasksApi
+     */
+    public putTaskUndone(id: string, options?: AxiosRequestConfig) {
+        return TasksApiFp(this.configuration).putTaskUndone(id, options).then((request) => request(this.axios, this.basePath));
     }
 }

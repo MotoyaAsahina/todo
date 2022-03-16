@@ -94,13 +94,20 @@ export default defineComponent({
     const postTag = async () => {
       let raw = rawData.value.split('\n')
       if (raw.length < 2 || raw[0]?.length === 0 || raw[1]?.length === 0) return
+
+      let reqTag = {
+        name: raw[0] ?? '',
+        color: raw[1] ?? ''
+      }
+
       if (isNew.value) {
-        await apis.postTag({
-          name: raw[0] ?? '',
-          color: raw[1] ?? ''
+        await apis.postTag(reqTag).then(() => {
+          // refresh
         })
       } else {
-        // Update
+        await apis.putTag(editingTag?.id ?? '', reqTag).then(() => {
+          // refresh
+        })
       }
     }
 

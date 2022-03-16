@@ -96,12 +96,19 @@ export default defineComponent({
     const postGroup = async () => {
       let name = rawData.value.split('\n')[0]
       if (name?.length === 0) return
+
+      let reqGroup = {
+        name: name ?? ''
+      }
+
       if (isNew.value) {
-        await apis.postGroup({
-          name: name ?? ''
+        await apis.postGroup(reqGroup).then(() => {
+          // refresh
         })
       } else {
-        // Update
+        await apis.putGroup(editingGroup?.id ?? '', reqGroup).then(() => {
+          // refresh
+        })
       }
     }
 

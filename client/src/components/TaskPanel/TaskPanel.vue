@@ -119,7 +119,7 @@ export default defineComponent({
 
     const operateTaskEditor = () => {
       const temp = editing.value
-      if (temp && !editingTask.value) closeEditors()
+      if (openingMenu.value || (temp && !editingTask.value)) closeEditors()
       if (!temp) {
         editing.value = true
       }
@@ -174,16 +174,24 @@ export default defineComponent({
     const postTask = async () => {
       let rawData = rawTaskData.value.split('\n')
       if (rawData.length < 2 || rawData[0] === '' || rawData[1] === '') return
+
+      const reqTask = {
+        group_id: props.group.id,
+        title: rawData[0] ?? '',
+        description: rawData.slice(2).join('\n') ?? '',
+        due_date: rawData[1] ?? '',
+        tags: [...selectingTags].map(tag => tag.id)
+      }
+
       if (isNew.value) {
-        await apis.postTask({
-          group_id: props.group.id,
-          title: rawData[0] ?? '',
-          description: rawData[2] ?? '',
-          due_date: rawData[1] ?? '',
-          tags: [...selectingTags].map(tag => tag.id)
+        await apis.postTask(reqTask).then(() => {
+          // refresh
         })
       } else {
-        // Update
+        if (!editingTask.value) return
+        await apis.putTask(editingTask.value.id, reqTask).then(() => {
+          // refresh
+        })
       }
     }
 

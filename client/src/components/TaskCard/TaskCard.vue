@@ -5,8 +5,8 @@
     @mouseleave="cardHover = false"
   >
     <div v-show="cardHover" class="absolute top-0 right-0 mr-2 mt-2 flex">
-      <check-icon class="mr-0.5" />
-      <delete-icon />
+      <a @click="putTaskDone"><check-icon class="mr-0.5" /></a>
+      <a @click="deleteTask"><delete-icon /></a>
     </div>
 
     <a class="cursor-pointer font-bold" @click="$emit('editTask', task)">
@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
-import { Task, Tags, Tag } from '/@/lib/apis'
+import { apis, Task, Tags, Tag } from '/@/lib/apis'
 import TaskTag from '/@/components/TaskTag/TaskTag.vue'
 import CheckIcon from '/@/components/UI/CheckIcon.vue'
 import DeleteIcon from '/@/components/UI/DeleteIcon.vue'
@@ -75,7 +75,19 @@ export default defineComponent({
       )
     }
 
-    return { formatDueDate, findTag }
+    const putTaskDone = async () => {
+      await apis.putTaskDone(props.task.id).then(() => {
+        // refresh
+      })
+    }
+
+    const deleteTask = async () => {
+      await apis.deleteTask(props.task.id).then(() => {
+        // refresh
+      })
+    }
+
+    return { formatDueDate, findTag, putTaskDone, deleteTask }
   },
   data() {
     return {
