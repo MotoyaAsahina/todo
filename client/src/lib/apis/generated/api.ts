@@ -371,6 +371,72 @@ export const GroupsApiAxiosParamCreator = function (configuration?: Configuratio
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} id ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putGroupDown: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('putGroupDown', 'id', id)
+            const localVarPath = `/groups/{id}/down`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @param {string} id ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putGroupUp: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('putGroupUp', 'id', id)
+            const localVarPath = `/groups/{id}/up`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -421,6 +487,26 @@ export const GroupsApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.putGroup(id, postGroup, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {string} id ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async putGroupDown(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putGroupDown(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @param {string} id ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async putGroupUp(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.putGroupUp(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -466,6 +552,24 @@ export const GroupsApiFactory = function (configuration?: Configuration, basePat
          */
         putGroup(id: string, postGroup: PostGroup, options?: any): AxiosPromise<Group> {
             return localVarFp.putGroup(id, postGroup, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putGroupDown(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.putGroupDown(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @param {string} id ID
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        putGroupUp(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.putGroupUp(id, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -519,6 +623,28 @@ export class GroupsApi extends BaseAPI {
      */
     public putGroup(id: string, postGroup: PostGroup, options?: AxiosRequestConfig) {
         return GroupsApiFp(this.configuration).putGroup(id, postGroup, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupsApi
+     */
+    public putGroupDown(id: string, options?: AxiosRequestConfig) {
+        return GroupsApiFp(this.configuration).putGroupDown(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} id ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupsApi
+     */
+    public putGroupUp(id: string, options?: AxiosRequestConfig) {
+        return GroupsApiFp(this.configuration).putGroupUp(id, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -1279,6 +1405,28 @@ export class Apis extends BaseAPI {
      */
     public putGroup(id: string, postGroup: PostGroup, options?: AxiosRequestConfig) {
         return GroupsApiFp(this.configuration).putGroup(id, postGroup, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @param {string} id ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupsApi
+     */
+    public putGroupDown(id: string, options?: AxiosRequestConfig) {
+        return GroupsApiFp(this.configuration).putGroupDown(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     *
+     * @param {string} id ID
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GroupsApi
+     */
+    public putGroupUp(id: string, options?: AxiosRequestConfig) {
+        return GroupsApiFp(this.configuration).putGroupUp(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

@@ -58,3 +58,67 @@ func PutGroup(c echo.Context) error {
 func DeleteGroup(c echo.Context) error {
 	return c.JSON(200, "DeleteGroup")
 }
+
+func PutGroupUp(c echo.Context) error {
+	id := uuid.MustParse(c.Param("id"))
+	groups, err := model.GetGroups(c.Request().Context())
+	if err != nil {
+		return err
+	}
+
+	for i, group := range groups {
+		if group.Id == id {
+			if i == 0 {
+				return c.JSON(200, nil)
+			}
+			err = model.PutGroupOrder(c.Request().Context(), &model.Group{
+				Id:    id,
+				Order: group.Order - 1,
+			})
+			if err != nil {
+				return err
+			}
+			err = model.PutGroupOrder(c.Request().Context(), &model.Group{
+				Id:    groups[i-1].Id,
+				Order: group.Order,
+			})
+			if err != nil {
+				return err
+			}
+			return c.JSON(200, nil)
+		}
+	}
+	return c.JSON(200, nil)
+}
+
+func PutGroupDown(c echo.Context) error {
+	id := uuid.MustParse(c.Param("id"))
+	groups, err := model.GetGroups(c.Request().Context())
+	if err != nil {
+		return err
+	}
+
+	for i, group := range groups {
+		if group.Id == id {
+			if i == len(groups)-1 {
+				return c.JSON(200, nil)
+			}
+			err = model.PutGroupOrder(c.Request().Context(), &model.Group{
+				Id:    id,
+				Order: group.Order + 1,
+			})
+			if err != nil {
+				return err
+			}
+			err = model.PutGroupOrder(c.Request().Context(), &model.Group{
+				Id:    groups[i+1].Id,
+				Order: group.Order,
+			})
+			if err != nil {
+				return err
+			}
+			return c.JSON(200, nil)
+		}
+	}
+	return c.JSON(200, nil)
+}

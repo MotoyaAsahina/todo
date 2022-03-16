@@ -24,3 +24,7 @@ func PostGroup(ctx context.Context, group *Group) error {
 func PutGroup(ctx context.Context, group *Group) error {
 	return GetDB(ctx).Model(&Group{Id: group.Id}).Update("name", group.Name).Error
 }
+
+func PutGroupOrder(ctx context.Context, group *Group) error {
+	return GetDB(ctx).Model(&Group{Id: group.Id}).Update("order", group.Order).Error
+}

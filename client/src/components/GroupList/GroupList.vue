@@ -35,8 +35,10 @@
         :key="group.id"
         class="my-2 px-3 flex items-center"
       >
-        <up-arrow-icon :size="18" />
-        <down-arrow-icon :size="18" class="ml-1" />
+        <a @click="moveGroup(group.id, 'up')"><up-arrow-icon :size="18" /></a>
+        <a @click="moveGroup(group.id, 'down')"
+          ><down-arrow-icon :size="18" class="ml-1"
+        /></a>
         <p class="ml-3 cursor-pointer" @click="setEditGroup(group)">
           {{ group.name }}
         </p>
@@ -126,6 +128,18 @@ export default defineComponent({
       rawData.value = ''
     }
 
+    const moveGroup = async (id: string, direction: 'up' | 'down') => {
+      if (direction === 'up') {
+        await apis.putGroupUp(id).then(() => {
+          refresh()
+        })
+      } else {
+        await apis.putGroupDown(id).then(() => {
+          refresh()
+        })
+      }
+    }
+
     return {
       rawData,
       editing,
@@ -133,7 +147,8 @@ export default defineComponent({
       newOrEdit,
       setEditGroup,
       postGroup,
-      closeEditor
+      closeEditor,
+      moveGroup
     }
   }
 })

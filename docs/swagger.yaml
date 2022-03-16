@@ -146,6 +146,28 @@ paths:
         "204":
           description: 正常に削除できました
 
+  /groups/{id}/up:
+    parameters:
+      - $ref: "#/components/parameters/id"
+    put:
+      operationId: putGroupUp
+      tags:
+        - groups
+      responses:
+        "204":
+          description: 正常に更新できました
+
+  /groups/{id}/down:
+    parameters:
+      - $ref: "#/components/parameters/id"
+    put:
+      operationId: putGroupDown
+      tags:
+        - groups
+      responses:
+        "204":
+          description: 正常に更新できました
+
   /tags:
     get:
       operationId: getTags
