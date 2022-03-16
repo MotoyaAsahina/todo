@@ -26,9 +26,8 @@
         'whitespace-nowrap overflow-hidden overflow-ellipsis': !cardClick
       }"
       @click="cardClick = !cardClick"
-    >
-      {{ task.description }}
-    </p>
+      v-html="surroundURLInText(task.description)"
+    ></p>
   </div>
 </template>
 
@@ -94,7 +93,25 @@ export default defineComponent({
 
     const stamp = (d: string): string => selectStamp(d)
 
-    return { formatDueDate, findTag, putTaskDone, deleteTask, stamp }
+    const surroundURL = (url: string) => {
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`
+    }
+
+    const surroundURLInText = (text: string) => {
+      return text.replace(
+        /(https?:\/\/[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+)/g,
+        surroundURL
+      )
+    }
+
+    return {
+      formatDueDate,
+      findTag,
+      putTaskDone,
+      deleteTask,
+      stamp,
+      surroundURLInText
+    }
   },
   data() {
     return {
