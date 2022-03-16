@@ -18,7 +18,7 @@ func main() {
 
 	router.SetupGoogleOauth2()
 
-	e.Static("/", "client")
+	e.Static("/", "client/dist")
 	e.Static("/js", "client/dist/js")
 	e.Static("/css", "client/dist/css")
 

@@ -21,7 +21,11 @@ type Task struct {
 
 func GetTasks(ctx context.Context) ([]*Task, error) {
 	var tasks []*Task
-	err := GetDB(ctx).Model(&Task{}).Where("done = ?", false).Order("due_date").Find(&tasks).Error
+	err := GetDB(ctx).
+		Model(&Task{}).
+		Where("done = ?", false).
+		Order("due_date, created_at").
+		Find(&tasks).Error
 	return tasks, err
 }
 
