@@ -9,9 +9,12 @@
       <a @click="deleteTask"><delete-icon /></a>
     </div>
 
-    <a class="cursor-pointer font-bold" @click="$emit('editTask', task)">
-      {{ task.title }}
-    </a>
+    <div>
+      <span class="mr-1.2">{{ stamp(task.due_date) }}</span>
+      <a class="cursor-pointer font-bold" @click="$emit('editTask', task)">
+        {{ task.title }}
+      </a>
+    </div>
     <div class="flex flex-wrap gap-1 mt-0.6">
       <p class="mr-1 leading-5">{{ formatDueDate(task.due_date) }}</p>
       <task-tag v-for="tagID in task.tags" :key="tagID" :tag="findTag(tagID)" />
@@ -33,6 +36,7 @@
 import { defineComponent, PropType } from 'vue'
 import { apis, Task, Tags, Tag } from '/@/lib/apis'
 import { refresh } from '/@/lib/refresh'
+import { selectStamp } from '/@/lib/stamp'
 import TaskTag from '/@/components/TaskTag/TaskTag.vue'
 import CheckIcon from '/@/components/UI/CheckIcon.vue'
 import DeleteIcon from '/@/components/UI/DeleteIcon.vue'
@@ -88,7 +92,9 @@ export default defineComponent({
       })
     }
 
-    return { formatDueDate, findTag, putTaskDone, deleteTask }
+    const stamp = (d: string): string => selectStamp(d)
+
+    return { formatDueDate, findTag, putTaskDone, deleteTask, stamp }
   },
   data() {
     return {
