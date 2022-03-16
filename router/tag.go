@@ -36,6 +36,19 @@ func PostTag(c echo.Context) error {
 }
 
 func PutTag(c echo.Context) error {
+	id := uuid.MustParse(c.Param("id"))
+	req := new(PostTagRequest)
+	if err := c.Bind(req); err != nil {
+		return err
+	}
+	err := model.PutTag(c.Request().Context(), &model.Tag{
+		ID:    id,
+		Name:  req.Name,
+		Color: req.Color,
+	})
+	if err != nil {
+		return err
+	}
 	return c.String(200, "PutTag")
 }
 

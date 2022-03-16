@@ -23,9 +23,15 @@ func PostGroup(c echo.Context) error {
 	if err := c.Bind(req); err != nil {
 		return err
 	}
-	err := model.PostGroup(c.Request().Context(), &model.Group{
-		Id:   uuid.New(),
-		Name: req.Name,
+
+	groups, err := model.GetGroups(c.Request().Context())
+	if err != nil {
+		return err
+	}
+	err = model.PostGroup(c.Request().Context(), &model.Group{
+		Id:    uuid.New(),
+		Name:  req.Name,
+		Order: len(groups),
 	})
 	if err != nil {
 		return err
@@ -34,7 +40,19 @@ func PostGroup(c echo.Context) error {
 }
 
 func PutGroup(c echo.Context) error {
-	return c.JSON(200, "PutGroup")
+	id := uuid.MustParse(c.Param("id"))
+	req := new(PostGroupRequest)
+	if err := c.Bind(req); err != nil {
+		return err
+	}
+	err := model.PutGroup(c.Request().Context(), &model.Group{
+		Id:   id,
+		Name: req.Name,
+	})
+	if err != nil {
+		return err
+	}
+	return c.JSON(200, nil)
 }
 
 func DeleteGroup(c echo.Context) error {

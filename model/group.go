@@ -13,7 +13,7 @@ type Group struct {
 
 func GetGroups(ctx context.Context) ([]*Group, error) {
 	var groups []*Group
-	err := GetDB(ctx).Find(&groups).Error
+	err := GetDB(ctx).Find(&groups).Order("order").Error
 	return groups, err
 }
 
@@ -22,5 +22,5 @@ func PostGroup(ctx context.Context, group *Group) error {
 }
 
 func PutGroup(ctx context.Context, group *Group) error {
-	return GetDB(ctx).Save(group).Error
+	return GetDB(ctx).Model(&Group{Id: group.Id}).Update("name", group.Name).Error
 }

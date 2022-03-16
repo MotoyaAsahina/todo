@@ -99,7 +99,39 @@ func PutTask(c echo.Context) error {
 	}
 	id := uuid.MustParse(c.Param("id"))
 
-	err := model.PutTask(c.Request().Context(), &model.Task{
+	registeredTagMaps, err := model.GetTagMapsByTaskID(c.Request().Context(), id)
+	registeredTags := make([]uuid.UUID, 0)
+	for _, tagMap := range registeredTagMaps {
+		registeredTags = append(registeredTags, tagMap.TagID)
+	}
+
+	reqTags := make([]uuid.UUID, 0)
+	for _, tag := range req.Tags {
+		reqTags = append(reqTags, uuid.MustParse(tag))
+	}
+
+	newTags := make([]*model.TagMap, 0)
+	for _, tagID := range reqTags {
+		if !isRegisteredTag(tagID, registeredTags) {
+			newTags = append(newTags, &model.TagMap{
+				ID:     uuid.New(),
+				TaskID: id,
+				TagID:  tagID,
+			})
+		}
+	}
+	deletedTags := make([]*model.TagMap, 0)
+	for _, tagMap := range registeredTagMaps {
+		if !isRegisteredTag(tagMap.TagID, reqTags) {
+			deletedTags = append(deletedTags, &model.TagMap{
+				ID:     tagMap.ID,
+				TaskID: id,
+				TagID:  tagMap.TagID,
+			})
+		}
+	}
+
+	err = model.PutTask(c.Request().Context(), &model.Task{
 		ID:          id,
 		Title:       req.Title,
 		Description: req.Description,
@@ -109,7 +141,29 @@ func PutTask(c echo.Context) error {
 		return err
 	}
 
+	if len(newTags) > 0 {
+		err = model.PostTagMaps(c.Request().Context(), newTags)
+		if err != nil {
+			return err
+		}
+	}
+	if len(deletedTags) > 0 {
+		err = model.DeleteTagMaps(c.Request().Context(), deletedTags)
+		if err != nil {
+			return err
+		}
+	}
+
 	return c.JSON(200, nil)
+}
+
+func isRegisteredTag(tagID uuid.UUID, registeredTags []uuid.UUID) bool {
+	for _, registeredTag := range registeredTags {
+		if tagID.String() == registeredTag.String() {
+			return true
+		}
+	}
+	return false
 }
 
 func DeleteTask(c echo.Context) error {
@@ -122,8 +176,6 @@ func PutTaskDone(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-
-	// tag map更新
 
 	return c.JSON(200, nil)
 }

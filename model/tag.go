@@ -3,6 +3,7 @@ package model
 import (
 	"context"
 	"github.com/google/uuid"
+	"sort"
 )
 
 type Tag struct {
@@ -29,8 +30,11 @@ func PostTag(ctx context.Context, tag *Tag) error {
 	return GetDB(ctx).Create(tag).Error
 }
 
-func UpdateTag(ctx context.Context, tag *Tag) error {
-	return GetDB(ctx).Save(tag).Error
+func PutTag(ctx context.Context, tag *Tag) error {
+	return GetDB(ctx).Model(&Tag{ID: tag.ID}).Updates(map[string]interface{}{
+		"name":  tag.Name,
+		"color": tag.Color,
+	}).Error
 }
 
 func GetTagMaps(ctx context.Context) (map[uuid.UUID][]uuid.UUID, error) {
@@ -45,9 +49,29 @@ func GetTagMaps(ctx context.Context) (map[uuid.UUID][]uuid.UUID, error) {
 		tagMap[t.TaskID] = append(tagMap[t.TaskID], t.TagID)
 	}
 
+	for taskID := range tagMap {
+		sort.Slice(tagMap[taskID], func(i, j int) bool {
+			return tagMap[taskID][i].String() < tagMap[taskID][j].String()
+		})
+	}
+
 	return tagMap, err
+}
+
+func GetTagMapsByTaskID(ctx context.Context, taskID uuid.UUID) ([]*TagMap, error) {
+	var tagMaps []*TagMap
+	err := GetDB(ctx).Where("task_id = ?", taskID).Find(&tagMaps).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return tagMaps, err
 }
 
 func PostTagMaps(ctx context.Context, tagMap []*TagMap) error {
 	return GetDB(ctx).Create(tagMap).Error
+}
+
+func DeleteTagMaps(ctx context.Context, tagMap []*TagMap) error {
+	return GetDB(ctx).Delete(tagMap).Error
 }
