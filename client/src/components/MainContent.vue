@@ -17,6 +17,7 @@
 import { ref } from 'vue'
 import { apis, Groups, Group, Tasks, Tags } from '/@/lib/apis'
 import TaskPanel from '/@/components/TaskPanel/TaskPanel.vue'
+import { addRefreshListener } from '/@/lib/refresh'
 
 export default {
   name: 'MainContent',
@@ -38,6 +39,8 @@ export default {
       const res = await apis.getTags()
       tags.value = res.data
     }
+
+    addRefreshListener(fetchGroups, fetchTasks, fetchTags)
 
     // TODO: エラーハンドリング
     try {

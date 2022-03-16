@@ -45,6 +45,7 @@
 <script lang="ts">
 import { defineComponent, ref, PropType } from 'vue'
 import { apis, Group, Groups } from '/@/lib/apis'
+import { refresh } from '/@/lib/refresh'
 import HeaderList from '/@/components/Layout/PageHeader/HeaderList.vue'
 import UpArrowIcon from '/@/components/UI/UpArrowIcon.vue'
 import DownArrowIcon from '/@/components/UI/DownArrowIcon.vue'
@@ -103,13 +104,20 @@ export default defineComponent({
 
       if (isNew.value) {
         await apis.postGroup(reqGroup).then(() => {
-          // refresh
+          refresh()
+          closeEditor()
         })
       } else {
         await apis.putGroup(editingGroup?.id ?? '', reqGroup).then(() => {
-          // refresh
+          refresh()
+          closeEditor()
         })
       }
+    }
+
+    const closeEditor = () => {
+      editing.value = false
+      rawData.value = ''
     }
 
     return { rawData, editing, isNew, newOrEdit, setEditGroup, postGroup }

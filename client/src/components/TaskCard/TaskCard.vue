@@ -32,6 +32,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from 'vue'
 import { apis, Task, Tags, Tag } from '/@/lib/apis'
+import { refresh } from '/@/lib/refresh'
 import TaskTag from '/@/components/TaskTag/TaskTag.vue'
 import CheckIcon from '/@/components/UI/CheckIcon.vue'
 import DeleteIcon from '/@/components/UI/DeleteIcon.vue'
@@ -77,13 +78,13 @@ export default defineComponent({
 
     const putTaskDone = async () => {
       await apis.putTaskDone(props.task.id).then(() => {
-        // refresh
+        refresh()
       })
     }
 
     const deleteTask = async () => {
       await apis.deleteTask(props.task.id).then(() => {
-        // refresh
+        refresh()
       })
     }
 

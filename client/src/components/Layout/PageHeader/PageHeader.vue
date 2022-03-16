@@ -22,6 +22,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { apis, Groups, Tags } from '/@/lib/apis'
+import { addRefreshListener, addRefreshVoidListener } from '/@/lib/refresh'
 import TagList from '/@/components/TagList/TagList.vue'
 import GroupList from '/@/components/GroupList/GroupList.vue'
 import OrderIcon from '/@/components/UI/ReorderHorizontalIcon.vue'
@@ -48,6 +49,8 @@ export default defineComponent({
       tags.value = res.data
     }
 
+    addRefreshListener(fetchGroups, fetchTags)
+
     try {
       fetchGroups()
       fetchTags()
@@ -56,28 +59,33 @@ export default defineComponent({
       console.log(e)
     }
 
-    return { groups, tags }
-  },
-  data() {
-    return {
-      editingTags: false,
-      editingGroups: false
+    const editingTags = ref(false)
+    const editingGroups = ref(false)
+
+    const operateTagEditor = () => {
+      const temp = editingTags.value
+      closeEditors()
+      if (!temp) editingTags.value = true
     }
-  },
-  methods: {
-    operateTagEditor() {
-      const temp = this.editingTags
-      this.closeEditors()
-      if (!temp) this.editingTags = true
-    },
-    operateGroupEditor() {
-      const temp = this.editingGroups
-      this.closeEditors()
-      if (!temp) this.editingGroups = true
-    },
-    closeEditors() {
-      this.editingTags = false
-      this.editingGroups = false
+    const operateGroupEditor = () => {
+      const temp = editingGroups.value
+      closeEditors()
+      if (!temp) editingGroups.value = true
+    }
+    const closeEditors = () => {
+      editingTags.value = false
+      editingGroups.value = false
+    }
+
+    // addRefreshVoidListener(closeEditors)
+
+    return {
+      groups,
+      tags,
+      editingTags,
+      editingGroups,
+      operateTagEditor,
+      operateGroupEditor
     }
   }
 })

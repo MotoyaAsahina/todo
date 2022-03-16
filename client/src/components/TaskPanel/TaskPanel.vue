@@ -73,6 +73,7 @@
 <script lang="ts">
 import { defineComponent, ref, PropType } from 'vue'
 import { apis, Group, Tag, Tags, Task, Tasks } from '/@/lib/apis'
+import { refresh } from '/@/lib/refresh'
 import TaskCard from '/@/components/TaskCard/TaskCard.vue'
 import DotsIcon from '/@/components/UI/DotsHorizontalIcon.vue'
 import AddIcon from '/@/components/UI/AddIcon.vue'
@@ -187,12 +188,14 @@ export default defineComponent({
 
       if (isNew.value) {
         await apis.postTask(reqTask).then(() => {
-          // refresh
+          refresh()
+          closeEditors()
         })
       } else {
         if (!editingTask.value) return
         await apis.putTask(editingTask.value.id, reqTask).then(() => {
-          // refresh
+          refresh()
+          closeEditors()
         })
       }
     }

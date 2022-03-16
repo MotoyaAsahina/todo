@@ -49,6 +49,7 @@ import TaskTag from '/@/components/TaskTag/TaskTag.vue'
 import HeaderList from '/@/components/Layout/PageHeader/HeaderList.vue'
 import CheckIcon from '/@/components/UI/CheckIcon.vue'
 import CloseIcon from '/@/components/UI/CloseIcon.vue'
+import { refresh } from '/@/lib/refresh'
 
 export default defineComponent({
   name: 'TagList',
@@ -102,13 +103,20 @@ export default defineComponent({
 
       if (isNew.value) {
         await apis.postTag(reqTag).then(() => {
-          // refresh
+          refresh()
+          closeEditor()
         })
       } else {
         await apis.putTag(editingTag?.id ?? '', reqTag).then(() => {
-          // refresh
+          refresh()
+          closeEditor()
         })
       }
+    }
+
+    const closeEditor = () => {
+      editing.value = false
+      rawData.value = ''
     }
 
     return { rawData, editing, isNew, newOrEdit, setEditTag, postTag }
