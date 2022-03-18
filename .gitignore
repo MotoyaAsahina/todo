@@ -1,3 +1,4 @@
-development/todo_api_mock.json
+docs/api_mock/todo_api_mock.json
 docker/.env
 tmp/
+*.tar
