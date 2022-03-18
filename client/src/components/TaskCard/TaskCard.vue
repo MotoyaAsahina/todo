@@ -15,19 +15,26 @@
         {{ task.title }}
       </a>
     </div>
-    <div class="flex flex-wrap gap-1 mt-0.6">
+    <div class="flex flex-wrap gap-1 mt-0.4">
       <p class="mr-1 leading-5">{{ formatDueDate(task.due_date) }}</p>
       <task-tag v-for="tagID in task.tags" :key="tagID" :tag="findTag(tagID)" />
     </div>
-    <p
+    <div
       v-if="task.description?.length > 0"
-      class="mt-1.2 text-sm"
-      :class="{
-        'whitespace-nowrap overflow-hidden overflow-ellipsis': !cardClick
-      }"
+      class="pt-1"
       @click="cardClick = !cardClick"
-      v-html="surroundURLInText(task.description)"
-    ></p>
+    >
+      <p
+        v-if="!cardClick"
+        class="text-sm leading-snug whitespace-nowrap overflow-hidden overflow-ellipsis"
+        v-html="surroundURLInText(task.description)"
+      ></p>
+      <p
+        v-if="cardClick"
+        class="text-sm leading-snug"
+        v-html="validateNewLine(surroundURLInText(task.description))"
+      ></p>
+    </div>
   </div>
 </template>
 
@@ -94,7 +101,9 @@ export default defineComponent({
     const stamp = (d: string): string => selectStamp(d)
 
     const surroundURL = (url: string) => {
-      return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`
+      const style = 'overflow-wrap: break-word; color: #135fab'
+      const rel = 'noopener noreferrer'
+      return `<a style="${style}" href="${url}" target="_blank" rel="${rel}">${url}</a>`
     }
 
     const surroundURLInText = (text: string) => {
@@ -104,13 +113,18 @@ export default defineComponent({
       )
     }
 
+    const validateNewLine = (text: string) => {
+      return text.replace(/\n/g, '<br>')
+    }
+
     return {
       formatDueDate,
       findTag,
       putTaskDone,
       deleteTask,
       stamp,
-      surroundURLInText
+      surroundURLInText,
+      validateNewLine
     }
   },
   data() {
