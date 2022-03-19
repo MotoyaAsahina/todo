@@ -33,7 +33,13 @@
           ></textarea>
           <div class="flex flex-wrap items-end gap-1 relative">
             <a @click="openingTagList = !openingTagList"><tag-icon /></a>
-            <task-tag v-for="tag in selectingTags" :key="tag.id" :tag="tag" />
+            <task-tag
+              v-for="tag in Array.from(selectingTags).sort((a, b) =>
+                a.name.localeCompare(b.name)
+              )"
+              :key="tag.id"
+              :tag="tag"
+            />
 
             <div
               v-if="openingTagList"
