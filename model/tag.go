@@ -38,7 +38,11 @@ func PutTag(ctx context.Context, tag *Tag) error {
 
 func GetTagMaps(ctx context.Context) (map[uuid.UUID][]uuid.UUID, error) {
 	var tagMaps []TagMap
-	err := GetDB(ctx).Find(&tagMaps).Error
+	err := GetDB(ctx).
+		Select("tag_maps.id as id, tag_maps.task_id as task_id, tag_maps.tag_id as tag_id").
+		Joins("right join tags on tag_maps.tag_id = tags.id").
+		Order("tags.name").
+		Find(&tagMaps).Error
 	if err != nil {
 		return nil, err
 	}
