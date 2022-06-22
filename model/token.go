@@ -17,6 +17,8 @@ func IssueToken(ctx context.Context, googleToken string) (*Token, error) {
 		TokenID: base64.RawURLEncoding.EncodeToString([]byte(time.Now().String() + googleToken)),
 	}
 	if err := GetDB(ctx).Create(token).Error; err != nil {
+		// FIXME: おそらく既に登録されていてエラー
+		//  Docker 再起動すると新しいトークンが生成されるのはなぜ？
 		return nil, err
 	}
 	return token, nil
