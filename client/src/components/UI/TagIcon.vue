@@ -1,7 +1,7 @@
 <template>
   <icon
     class="cursor-pointer items-center flex"
-    :size="22"
+    :size="20"
     fill-color="#696969"
   />
 </template>

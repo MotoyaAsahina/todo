@@ -1,16 +1,16 @@
 <template>
-  <div class="w-sm h-full">
+  <div class="w-21rem h-full">
     <div
-      style="width: 23rem; height: calc(100% - 1rem)"
-      class="m-2 rounded-lg border-1 border-gray-300 bg-gray-50"
+      style="width: 20.2rem; height: calc(100% - 1rem)"
+      class="m-1.6 rounded-lg border-1 border-gray-200 bg-gray-50"
     >
-      <div class="h-10 pt-3 pb-2 px-3 flex items-center relative">
+      <div class="h-auto pt-2.4 pb-1.4 px-2 flex items-center relative">
         <span
-          class="w-5 h-5 flex-initial rounded-lg bg-gray-200 text-sm text-center"
+          class="w-auto px-1.4 h-4.4 flex-initial rounded-lg bg-gray-200 text-xs text-center leading-1.1rem"
         >
           {{ tasks?.length }}
         </span>
-        <h3 class="flex-1 pl-2 font-semibold">{{ group.name }}</h3>
+        <h3 class="flex-1 pl-1.6 text-base font-semibold">{{ group.name }}</h3>
         <a @click="operateTaskEditor"><add-icon /></a>
         <a @click="operateMenu"><dots-icon class="ml-0.5" /></a>
 
@@ -23,12 +23,12 @@
           @keydown.esc="closeEditors"
         >
           <div class="mb-2">
-            <h3 class="font-semibold">{{ newOrEdit() }} Task</h3>
+            <h3 class="text-base font-semibold">{{ newOrEdit() }} Task</h3>
           </div>
           <textarea
             :id="`task-editor-input-${group.id}`"
             v-model="rawTaskData"
-            class="w-full resize-none p-1 text-sm"
+            class="w-full resize-none p-1 text-sm resize-y"
             rows="6"
           ></textarea>
           <div class="flex flex-wrap items-end gap-1 relative">
@@ -43,7 +43,7 @@
 
             <div
               v-if="openingTagList"
-              class="top-0 left-6 w-60 absolute bg-white rounded-lg border-1 border-gray-300 shadow-md z-10"
+              class="top-0 left-6 w-60 absolute bg-white rounded-lg border-1 border-gray-200 shadow-md z-10"
             >
               <div class="m-2 flex flex-wrap gap-1">
                 <task-tag
@@ -69,7 +69,7 @@
 
       <div
         style="width: 100%; height: calc(100% - 2.5rem)"
-        class="px-2 overflow-scroll"
+        class="px-1.6 overflow-scroll"
       >
         <template v-for="task in tasks" :key="task.id">
           <task-card :task="task" :tags="tags" @edit-task="setEditTask" />

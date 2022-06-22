@@ -1,12 +1,12 @@
 <template>
   <div
-    class="h-5 cursor-pointer px-2 rounded-xl inline-block"
+    class="h-1.1rem cursor-pointer px-2 rounded-xl inline-block"
     :style="{
       'background-color': tag?.color,
       color: pickBlackOrWhite(tag?.color)
     }"
   >
-    <p class="text-sm font-medium">{{ tag?.name }}</p>
+    <p class="text-xs leading-1.1rem font-medium">{{ tag?.name }}</p>
   </div>
 </template>
 
