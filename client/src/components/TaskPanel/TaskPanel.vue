@@ -28,7 +28,7 @@
           <textarea
             :id="`task-editor-input-${group.id}`"
             v-model="rawTaskData"
-            class="w-full resize-none p-1 text-sm resize-y"
+            class="w-full p-1 text-sm resize-y border-1 border-gray-400"
             rows="6"
           ></textarea>
           <div class="flex flex-wrap items-end gap-1 relative">
@@ -137,6 +137,9 @@ export default defineComponent({
       editingTask.value = null
       rawTaskData.value = ''
       selectingTags.clear()
+      document
+        .getElementById(`task-editor-input-${props.group.id}`)
+        ?.removeAttribute('style')
       window.setTimeout(function () {
         document.getElementById(`task-editor-input-${props.group.id}`)?.focus()
       }, 10)
@@ -171,6 +174,9 @@ export default defineComponent({
           )
         }
       }
+      document
+        .getElementById(`task-editor-input-${props.group.id}`)
+        ?.removeAttribute('style')
       window.setTimeout(function () {
         document.getElementById(`task-editor-input-${props.group.id}`)?.focus()
       }, 10)

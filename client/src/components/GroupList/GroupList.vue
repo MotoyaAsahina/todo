@@ -16,7 +16,7 @@
           <textarea
             id="group-list-editor-input"
             v-model="rawData"
-            class="w-full resize-none p-1 text-sm"
+            class="w-full resize-none p-1 text-sm border-1 border-gray-400"
             rows="3"
             @keydown.meta.enter="postGroup"
             @keydown.esc="closeEditor"
@@ -97,6 +97,9 @@ export default defineComponent({
         rawData.value = ''
       }
       editing.value = true
+      document
+        .getElementById('group-list-editor-input')
+        ?.removeAttribute('style')
       window.setTimeout(function () {
         document.getElementById('group-list-editor-input')?.focus()
       }, 10)
