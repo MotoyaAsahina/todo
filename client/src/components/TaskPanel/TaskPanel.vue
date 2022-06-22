@@ -68,7 +68,7 @@
       </div>
 
       <div
-        style="width: 100%; height: calc(100% - 2.5rem)"
+        style="width: 100%; height: calc(100% - 2.3rem)"
         class="px-1.6 overflow-scroll"
       >
         <template v-for="task in tasks" :key="task.id">

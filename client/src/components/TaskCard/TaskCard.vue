@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full bg-white rounded-lg border-1 border-gray-200 my-1.6 px-1.6 py-1.2 shadow-sm relative"
+    class="w-full bg-white rounded-lg border-1 border-gray-200 my-1.6 px-1.6 pt-1.2 pb-1.6 shadow-sm relative"
     @mouseover="cardHover = true"
     @mouseleave="cardHover = false"
   >
@@ -18,7 +18,7 @@
         {{ task.title }}
       </a>
     </div>
-    <div class="flex flex-wrap gap-1 mb-0.6 mt-0.2">
+    <div class="flex flex-wrap gap-1 mt-0.2" @click="cardClick = !cardClick">
       <p class="mr-1 text-base leading-1.1rem">
         {{ formatDueDate(task.due_date) }}
       </p>
@@ -26,7 +26,7 @@
     </div>
     <div
       v-if="task.description?.length > 0"
-      class="mb-0.4"
+      class="pt-0.6"
       @click="cardClick = !cardClick"
     >
       <p
