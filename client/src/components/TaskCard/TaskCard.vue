@@ -18,8 +18,8 @@
         {{ task.title }}
       </a>
     </div>
-    <div class="flex flex-wrap gap-1 mt-0.2" @click="cardClick = !cardClick">
-      <p class="mr-1 text-base leading-1.1rem">
+    <div class="flex flex-wrap gap-1 mt-0.2">
+      <p class="mr-1 text-base leading-1.1rem" @click="cardClick = !cardClick">
         {{ formatDueDate(task.due_date) }}
       </p>
       <task-tag v-for="tagID in task.tags" :key="tagID" :tag="findTag(tagID)" />
