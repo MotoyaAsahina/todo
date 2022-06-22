@@ -8,12 +8,12 @@
 
     <tag-list
       v-show="editingTags"
-      class="absolute right-0 top-10"
+      class="absolute right-0 top-8"
       :tags="tags ?? []"
     />
     <group-list
       v-show="editingGroups"
-      class="absolute right-0 top-10"
+      class="absolute right-0 top-8"
       :groups="groups ?? []"
     />
   </header>

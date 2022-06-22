@@ -1,4 +1,5 @@
 docs/api_mock/todo_api_mock.json
+docs/api_mock/ignore_samples/
 docker/.env
 tmp/
 *.tar
