@@ -1,27 +1,32 @@
 <template>
   <div
-    class="w-full bg-white rounded-lg border-1 border-gray-300 my-2 p-2 shadow-sm relative"
+    class="w-full bg-white rounded-lg border-1 border-gray-200 my-1.6 px-1.6 pt-1.2 pb-1.6 shadow-sm relative"
     @mouseover="cardHover = true"
     @mouseleave="cardHover = false"
   >
-    <div v-show="cardHover" class="absolute top-0 right-0 mr-2 mt-2 flex">
+    <div v-show="cardHover" class="absolute top-0 right-0 mr-1.6 mt-1.2 flex">
       <a @click="putTaskDone"><check-icon class="mr-0.5" /></a>
       <a @click="deleteTask"><delete-icon /></a>
     </div>
 
     <div>
-      <span class="mr-1.2">{{ stamp(task.due_date) }}</span>
-      <a class="cursor-pointer font-bold" @click="$emit('editTask', task)">
+      <span class="mr-1.2 text-base">{{ stamp(task.due_date) }}</span>
+      <a
+        class="cursor-pointer text-base font-bold"
+        @click="$emit('editTask', task)"
+      >
         {{ task.title }}
       </a>
     </div>
-    <div class="flex flex-wrap gap-1 mt-0.4">
-      <p class="mr-1 leading-5">{{ formatDueDate(task.due_date) }}</p>
+    <div class="flex flex-wrap gap-1 mt-0.2" @click="cardClick = !cardClick">
+      <p class="mr-1 text-base leading-1.1rem">
+        {{ formatDueDate(task.due_date) }}
+      </p>
       <task-tag v-for="tagID in task.tags" :key="tagID" :tag="findTag(tagID)" />
     </div>
     <div
       v-if="task.description?.length > 0"
-      class="pt-1"
+      class="pt-0.6"
       @click="cardClick = !cardClick"
     >
       <p

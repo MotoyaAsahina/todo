@@ -1,7 +1,7 @@
 <template>
   <div
-    style="height: calc(100% - 3.5rem)"
-    class="w-full p-2 overflow-scroll flex"
+    style="height: calc(100% - 3rem)"
+    class="w-full p-1.6 overflow-scroll flex"
   >
     <template v-for="group in groups" :key="group.id">
       <task-panel

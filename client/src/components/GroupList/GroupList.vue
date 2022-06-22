@@ -8,10 +8,10 @@
     <template #editor>
       <div v-show="editing" class="absolute top-6.2 right-1">
         <div
-          class="w-60 p-3 bg-white rounded-lg border-1 border-gray-300 shadow-md"
+          class="w-60 p-2.4 bg-white rounded-lg border-1 border-gray-200 shadow-md"
         >
           <div class="mb-2">
-            <h3 class="font-semibold">{{ newOrEdit() }}</h3>
+            <h3 class="text-base font-semibold">{{ newOrEdit() }}</h3>
           </div>
           <textarea
             id="group-list-editor-input"
@@ -21,7 +21,7 @@
             @keydown.meta.enter="postGroup"
             @keydown.esc="closeEditor"
           ></textarea>
-          <div class="flex items-center justify-end mt-2">
+          <div class="flex items-center justify-end mt-1.6">
             <a @click="editing = false"><close-icon /></a>
             <a @click="postGroup()"><check-icon class="ml-0.5" /></a>
           </div>
@@ -33,13 +33,13 @@
       <div
         v-for="group in groups"
         :key="group.id"
-        class="my-2 px-3 flex items-center"
+        class="my-1.6 px-2.4 flex items-center"
       >
         <a @click="moveGroup(group.id, 'up')"><up-arrow-icon :size="18" /></a>
         <a @click="moveGroup(group.id, 'down')"
           ><down-arrow-icon :size="18" class="ml-1"
         /></a>
-        <p class="ml-3 cursor-pointer" @click="setEditGroup(group)">
+        <p class="ml-3 cursor-pointer text-base" @click="setEditGroup(group)">
           {{ group.name }}
         </p>
       </div>

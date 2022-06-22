@@ -1,6 +1,6 @@
 <template>
-  <div class="w-xs rounded-lg border-1 border-gray-300 bg-white shadow-md">
-    <div class="p-3">
+  <div class="w-18rem rounded-lg border-1 border-gray-200 bg-white shadow-md">
+    <div class="p-2.4">
       <slot></slot>
     </div>
   </div>

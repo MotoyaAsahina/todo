@@ -1,7 +1,7 @@
 <template>
-  <header class="h-14 w-full bg-gray-100 border-b-1 border-gray-300 relative">
+  <header class="h-3rem w-full bg-gray-100 border-b-1 border-gray-200 relative">
     <div class="h-full flex items-center px-4">
-      <div class="flex-1 text-xl">Todo</div>
+      <div class="flex-1 text-lg">Todo</div>
       <a @click="operateGroupEditor"><order-icon /></a>
       <a @click="operateTagEditor"><tag-icon class="ml-1.5" /></a>
     </div>

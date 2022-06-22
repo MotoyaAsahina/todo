@@ -8,10 +8,10 @@
     <template #editor>
       <div v-show="editing" class="absolute top-6.2 right-1">
         <div
-          class="w-60 p-3 bg-white rounded-lg border-1 border-gray-300 shadow-md"
+          class="w-60 p-2.4 bg-white rounded-lg border-1 border-gray-200 shadow-md"
         >
           <div class="mb-2">
-            <h3 class="font-semibold">{{ newOrEdit() }}</h3>
+            <h3 class="text-base font-semibold">{{ newOrEdit() }}</h3>
           </div>
           <textarea
             id="tag-list-editor-input"
@@ -21,7 +21,7 @@
             @keydown.meta.enter="postTag"
             @keydown.esc="closeEditor"
           ></textarea>
-          <div class="flex items-center justify-end mt-2">
+          <div class="flex items-center justify-end mt-1.6">
             <a @click="editing = false"><close-icon /></a>
             <a @click="postTag()"><check-icon class="ml-0.5" /></a>
           </div>
@@ -33,12 +33,12 @@
       <div
         v-for="(tag, index) in tags"
         :key="tag.id"
-        class="py-1 px-3"
+        class="py-0.8 px-2.4"
         :class="{ 'border-t-1 border-gray-200': index > 0 }"
       >
         <div class="flex items-center">
           <task-tag class="w-auto" :tag="tag" @click="setEditTag(tag)" />
-          <p class="ml-2">{{ tag.color }}</p>
+          <p class="ml-2 text-base">{{ tag.color }}</p>
         </div>
       </div>
     </template>
