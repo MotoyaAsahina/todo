@@ -29,7 +29,7 @@ export default {
 
     const fetchGroups = async () => {
       const res = await apis.getGroups()
-      groups.value = res.data
+      groups.value = res.data.filter(g => !/^\[Archived].*$/.test(g.name))
     }
     const fetchTasks = async () => {
       const res = await apis.getTasks()
