@@ -9,7 +9,7 @@ import (
 )
 
 type Token struct {
-	TokenID string `json:"tokenID" gorm:"size:300;primary_key"`
+	TokenID string `json:"tokenID" gorm:"size:400;primary_key"`
 }
 
 func IssueToken(ctx context.Context, googleToken string) (*Token, error) {

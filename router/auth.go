@@ -23,10 +23,15 @@ func GoogleCallback(c echo.Context) error {
 	code := c.QueryParam("code")
 	token, err := getTokenFromCode(code)
 	if err != nil {
+		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusBadRequest, "failed to get token")
 	}
 
 	email, err := getGmailFromToken(token)
+	if err != nil {
+		c.Logger().Error(err)
+		return echo.NewHTTPError(http.StatusBadRequest, "failed to get gmail address")
+	}
 	if !isWhiteList(email) {
 		return echo.NewHTTPError(http.StatusBadRequest, "failed to get gmail address")
 	}
@@ -35,6 +40,7 @@ func GoogleCallback(c echo.Context) error {
 
 	err = login(c, token.AccessToken)
 	if err != nil {
+		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusBadRequest, "failed to login")
 	}
 
