@@ -29,6 +29,12 @@ func GetTasks(ctx context.Context) ([]*Task, error) {
 	return tasks, err
 }
 
+func GetTask(ctx context.Context, id uuid.UUID) (*Task, error) {
+	var task Task
+	err := GetDB(ctx).Where("id = ?", id).First(&task).Error
+	return &task, err
+}
+
 func PutTaskDone(ctx context.Context, id uuid.UUID) error {
 	err := GetDB(ctx).Model(&Task{ID: id}).Updates(map[string]interface{}{
 		"done":    true,
@@ -37,13 +43,14 @@ func PutTaskDone(ctx context.Context, id uuid.UUID) error {
 	return err
 }
 
-func PutTask(ctx context.Context, task *Task) error {
-	err := GetDB(ctx).Model(&Task{ID: task.ID}).Updates(map[string]interface{}{
+func PutTask(ctx context.Context, task *Task) (*Task, error) {
+	t := &Task{ID: task.ID}
+	err := GetDB(ctx).Model(t).Updates(map[string]interface{}{
 		"title":       task.Title,
 		"description": task.Description,
 		"due_date":    task.DueDate,
 	}).Error
-	return err
+	return t, err
 }
 
 func PostTask(ctx context.Context, task *Task) (*Task, error) {

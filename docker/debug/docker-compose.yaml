@@ -19,6 +19,8 @@ services:
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       GOOGLE_REDIRECT_URL: ${GOOGLE_REDIRECT_URL}
       WHITE_LIST: ${WHITE_LIST}
+      SLACK_BOT_TOKEN: ${SLACK_BOT_TOKEN}
+      SLACK_CHANNEL_ID: ${SLACK_CHANNEL_ID}
       TZ: Asia/Tokyo
     ports:
       - "4002:4002"
@@ -38,6 +40,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: todo
+      TZ: Asia/Tokyo
     expose:
       - "3306"
 
