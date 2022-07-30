@@ -2,15 +2,17 @@ package model
 
 import (
 	"context"
+	"database/sql"
 	"github.com/go-sql-driver/mysql"
 	"github.com/google/uuid"
 	"time"
 )
 
 type NotificationTime struct {
-	Time      time.Time `json:"time" gorm:"type:timestamp;not null;primaryKey;default:0"`
-	Noticed   bool      `json:"noticed" gorm:"type:boolean;not null;default:false"`
-	TaskCount int       `json:"task_count" gorm:"type:int;not null;default:0"`
+	Time      time.Time    `json:"time" gorm:"type:timestamp;not null;primaryKey;default:0"`
+	Noticed   bool         `json:"noticed" gorm:"type:boolean;not null;default:false"`
+	NoticedAt sql.NullTime `json:"noticed_at" gorm:"type:timestamp null"`
+	TaskCount int          `json:"task_count" gorm:"type:int;not null;default:0"`
 }
 
 type Notification struct {
@@ -68,6 +70,7 @@ func GetLatestNotifications(ctx context.Context) ([]*Notification, error) {
 	// Set noticed and task_count
 	err = GetDB(ctx).Model(&NotificationTime{Time: latestTime}).Updates(map[string]interface{}{
 		"noticed":    true,
+		"noticed_at": time.Now(),
 		"task_count": len(notifications),
 	}).Error
 	if err != nil {
