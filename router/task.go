@@ -329,7 +329,7 @@ func postMessage(message string) {
 	api := slack.New(os.Getenv("SLACK_BOT_TOKEN"))
 	_, _, err := api.PostMessage(os.Getenv("SLACK_CHANNEL_ID"), slack.MsgOptionText(message, false))
 	if err != nil {
-		fmt.Printf("[ERROR: slack post]%s\n", err.Error())
+		fmt.Printf("[ERROR: slack post] %s\n", err.Error())
 	}
 }
 
@@ -374,4 +374,27 @@ func getNotificationTimesFromDescription(description string, dueDate time.Time) 
 	}
 
 	return notificationTimes, resSlice
+}
+
+func ResetNotifications() {
+	notificationTimes, err := model.GetValidNotificationTimes(context.Background())
+	if err != nil {
+		fmt.Printf("[ERROR: reset notifications] %s\n", err.Error())
+		return
+	}
+
+	for _, t := range notificationTimes {
+		fromNow := t.Sub(time.Now())
+		if fromNow <= 0 {
+			// already passed
+			err = model.SetNotificationTimeNoticed(context.Background(), t)
+			continue
+		}
+
+		timer := time.NewTimer(fromNow)
+		go func() {
+			<-timer.C
+			notify()
+		}()
+	}
 }

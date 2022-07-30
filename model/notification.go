@@ -79,3 +79,23 @@ func GetLatestNotifications(ctx context.Context) ([]*Notification, error) {
 
 	return notifications, nil
 }
+
+func GetValidNotificationTimes(ctx context.Context) ([]time.Time, error) {
+	var notificationTimes []time.Time
+	err := GetDB(ctx).
+		Model(&NotificationTime{}).
+		Where("noticed = false").Order("time asc").
+		Select("time").Find(&notificationTimes).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return notificationTimes, nil
+}
+
+func SetNotificationTimeNoticed(ctx context.Context, t time.Time) error {
+	err := GetDB(ctx).Model(&NotificationTime{Time: t}).Updates(map[string]interface{}{
+		"noticed": true,
+	}).Error
+	return err
+}
