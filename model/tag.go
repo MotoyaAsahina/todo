@@ -65,6 +65,22 @@ func GetTagMapsByTaskID(ctx context.Context, taskID uuid.UUID) ([]*TagMap, error
 	return tagMaps, err
 }
 
+func GetTagNamesByTaskID(ctx context.Context, taskID uuid.UUID) ([]string, error) {
+	var tagNames []string
+	err := GetDB(ctx).
+		Model(&Tag{}).
+		Select("tags.name as name").
+		Joins("right join tag_maps on tag_maps.tag_id = tags.id").
+		Where("tag_maps.task_id = ?", taskID).
+		Order("tags.name").
+		Pluck("tags.name", &tagNames).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return tagNames, err
+}
+
 func PostTagMaps(ctx context.Context, tagMap []*TagMap) error {
 	return GetDB(ctx).Create(tagMap).Error
 }

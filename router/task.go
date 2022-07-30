@@ -280,6 +280,7 @@ func notify() {
 		Title           string
 		Description     string
 		GroupName       string
+		Tags            []string
 		DueDate         time.Time
 		NotificationTag string
 	}
@@ -291,12 +292,20 @@ func notify() {
 			postMessage("Error: " + err.Error())
 			return
 		}
+
+		tags, err := model.GetTagNamesByTaskID(context.Background(), task.ID)
+		if err != nil {
+			postMessage("Error: " + err.Error())
+			return
+		}
+
 		if !task.Done {
 			tasks = append(tasks, formedTask{
 				Title:           task.Title,
 				Description:     task.Description,
 				GroupName:       findGroup(task.GroupID).Name,
 				DueDate:         task.DueDate,
+				Tags:            tags,
 				NotificationTag: notification.Tag,
 			})
 		}
@@ -314,6 +323,9 @@ func notify() {
 	// build message
 	message := "Tasks to do:\n"
 	for _, task := range tasks {
+		if len(task.Tags) > 0 {
+			task.GroupName += "," + strings.Join(task.Tags, ",")
+		}
 		message += fmt.Sprintf(
 			"%s (%s): %s (Remaining %s)\n",
 			task.Title,
