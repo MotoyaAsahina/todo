@@ -1,6 +1,7 @@
 package main
 
 import (
+	mid "github.com/MotoyaAsahina/todo/middleware"
 	"github.com/MotoyaAsahina/todo/model"
 	"github.com/MotoyaAsahina/todo/router"
 	"github.com/labstack/echo/v4"
@@ -24,7 +25,7 @@ func main() {
 	e.GET("/login", router.GoogleLogin)
 	e.GET("/callback", router.GoogleCallback)
 
-	echoAPI := e.Group("/api")
+	echoAPI := e.Group("/api", mid.EnsureAuthorized)
 	{
 		apiTasks := echoAPI.Group("/tasks")
 		{
