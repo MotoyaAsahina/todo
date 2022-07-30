@@ -32,12 +32,16 @@
       <p
         v-if="!cardClick"
         class="text-sm leading-snug whitespace-nowrap overflow-hidden overflow-ellipsis"
-        v-html="surroundURLInText(task.description)"
+        v-html="surroundURLInText(removeAnnotations(task.description))"
       ></p>
       <p
         v-if="cardClick"
         class="text-sm leading-snug"
-        v-html="validateNewLine(surroundURLInText(task.description))"
+        v-html="
+          validateNewLine(
+            surroundURLInText(removeAnnotations(task.description))
+          )
+        "
       ></p>
     </div>
   </div>
@@ -118,6 +122,10 @@ export default defineComponent({
       )
     }
 
+    const removeAnnotations = (text: string) => {
+      return text.replace(/!notice\[.*]/g, '')
+    }
+
     const validateNewLine = (text: string) => {
       return text.replace(/\n/g, '<br>')
     }
@@ -128,6 +136,7 @@ export default defineComponent({
       putTaskDone,
       deleteTask,
       stamp,
+      removeAnnotations,
       surroundURLInText,
       validateNewLine
     }

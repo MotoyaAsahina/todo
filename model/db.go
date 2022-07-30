@@ -17,6 +17,8 @@ var (
 		&Task{},
 		&TagMap{},
 		&Token{},
+		&NotificationTime{},
+		&Notification{},
 	}
 )
 
