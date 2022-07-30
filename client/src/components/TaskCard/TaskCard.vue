@@ -25,23 +25,19 @@
       <task-tag v-for="tagID in task.tags" :key="tagID" :tag="findTag(tagID)" />
     </div>
     <div
-      v-if="task.description?.length > 0"
+      v-if="removeAnnotations(task.description)?.length > 0"
       class="pt-0.6"
       @click="cardClick = !cardClick"
     >
       <p
         v-if="!cardClick"
         class="text-sm leading-snug whitespace-nowrap overflow-hidden overflow-ellipsis"
-        v-html="surroundURLInText(removeAnnotations(task.description))"
+        v-html="makeURL(removeAnnotations(task.description))"
       ></p>
       <p
         v-if="cardClick"
         class="text-sm leading-snug"
-        v-html="
-          validateNewLine(
-            surroundURLInText(removeAnnotations(task.description))
-          )
-        "
+        v-html="makeBR(makeURL(removeAnnotations(task.description)))"
       ></p>
     </div>
   </div>
@@ -115,7 +111,7 @@ export default defineComponent({
       return `<a style="${style}" href="${url}" target="_blank" rel="${rel}">${url}</a>`
     }
 
-    const surroundURLInText = (text: string) => {
+    const makeURL = (text: string) => {
       return text.replace(
         /(https?:\/\/[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+)/g,
         surroundURL
@@ -123,10 +119,10 @@ export default defineComponent({
     }
 
     const removeAnnotations = (text: string) => {
-      return text.replace(/!notice\[.*]/g, '')
+      return text.replace(/\n?!notice\[.*]/g, '')
     }
 
-    const validateNewLine = (text: string) => {
+    const makeBR = (text: string) => {
       return text.replace(/\n/g, '<br>')
     }
 
@@ -137,8 +133,8 @@ export default defineComponent({
       deleteTask,
       stamp,
       removeAnnotations,
-      surroundURLInText,
-      validateNewLine
+      makeURL,
+      makeBR
     }
   },
   data() {
