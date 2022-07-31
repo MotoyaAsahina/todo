@@ -25,9 +25,6 @@ type Notification struct {
 
 func SetNotification(ctx context.Context, taskID uuid.UUID, notificationTime time.Time, notificationTag string) (alreadyTimeExists bool, err error) {
 	normalTime := notificationTime.Add(-time.Duration(notificationTime.Second()) * time.Second)
-	if normalTime.Minute() == 59 {
-		normalTime = normalTime.Add(1 * time.Minute)
-	}
 	err = GetDB(ctx).Create(&NotificationTime{Time: normalTime}).Error
 
 	if err == nil {

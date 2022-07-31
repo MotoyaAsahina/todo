@@ -354,6 +354,10 @@ func getNotificationTimesFromDescription(description string, dueDate time.Time) 
 		res = m[1]
 	}
 
+	if dueDate.Minute() == 59 {
+		dueDate = dueDate.Add(time.Minute)
+	}
+
 	notificationTimes := make([]time.Time, 0)
 
 	resSlice := strings.Split(res, ",")
