@@ -257,13 +257,13 @@ func scheduleNotification(ctx context.Context, task *model.Task) error {
 func notify() {
 	notifications, err := model.GetLatestNotifications(context.Background())
 	if err != nil {
-		postMessage("Error: " + err.Error())
+		postMessage("Error: "+err.Error(), 0)
 		return
 	}
 
 	groups, err := model.GetGroups(context.Background())
 	if err != nil {
-		postMessage("Error: " + err.Error())
+		postMessage("Error: "+err.Error(), 0)
 		return
 	}
 
@@ -289,13 +289,13 @@ func notify() {
 	for _, notification := range notifications {
 		task, err := model.GetTask(context.Background(), notification.TaskID)
 		if err != nil {
-			postMessage("Error: " + err.Error())
+			postMessage("Error: "+err.Error(), 0)
 			return
 		}
 
 		tags, err := model.GetTagNamesByTaskID(context.Background(), task.ID)
 		if err != nil {
-			postMessage("Error: " + err.Error())
+			postMessage("Error: "+err.Error(), 0)
 			return
 		}
 
@@ -334,14 +334,21 @@ func notify() {
 			task.NotificationTag,
 		)
 	}
-	postMessage(message)
+	postMessage(message, 0)
 }
 
-func postMessage(message string) {
+func postMessage(message string, retryCount int) {
 	api := slack.New(os.Getenv("SLACK_BOT_TOKEN"))
 	_, _, err := api.PostMessage(os.Getenv("SLACK_CHANNEL_ID"), slack.MsgOptionText(message, false))
 	if err != nil {
-		fmt.Printf("[ERROR: slack post] %s\n", err.Error())
+		if retryCount < 5 {
+			time.Sleep(5 * time.Second)
+			postMessage(message, retryCount+1)
+		} else {
+			fmt.Printf("[slack post] %s %s\n", time.Now().Format("2006/01/02 15:04"), err.Error())
+		}
+	} else if retryCount > 0 {
+
 	}
 }
 
