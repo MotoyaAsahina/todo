@@ -1,9 +1,14 @@
 <template>
   <div
     class="w-full bg-white rounded-lg border-1 border-gray-200 my-1.6 px-1.6 pt-1.2 pb-1.6 shadow-sm relative"
+    :class="isPending(task) ? 'bg-gray-100 shadow-none' : ''"
     @mouseover="cardHover = true"
     @mouseleave="cardHover = false"
   >
+    <div
+      v-show="isPending(task)"
+      class="absolute rounded-lg bg-gray-100 w-full h-full left-0 top-0 bg-opacity-40 pointer-events-none"
+    ></div>
     <div v-show="cardHover" class="absolute top-0 right-0 mr-1.6 mt-1.2 flex">
       <a @click="putTaskDone"><check-icon class="mr-0.5" /></a>
       <a @click="deleteTask"><delete-icon /></a>
@@ -12,7 +17,8 @@
     <div>
       <span class="mr-1.2 text-base">{{ stamp(task.due_date) }}</span>
       <a
-        class="cursor-pointer text-base font-bold"
+        class="cursor-pointer text-base"
+        :class="!isPending(task) ? 'font-bold' : ''"
         @click="$emit('editTask', task)"
       >
         {{ task.title }}
@@ -118,8 +124,14 @@ export default defineComponent({
       )
     }
 
+    const isPending = (task: Task) => {
+      return task.description.match(/!pending\[.*]/)
+    }
+
     const removeAnnotations = (text: string) => {
-      return text.replace(/\n?!notice\[.*]/g, '')
+      return text
+        .replace(/\n?!notice\[.*]/g, '')
+        .replace(/\n?!pending\[.*]/g, '')
     }
 
     const makeBR = (text: string) => {
@@ -132,6 +144,7 @@ export default defineComponent({
       putTaskDone,
       deleteTask,
       stamp,
+      isPending,
       removeAnnotations,
       makeURL,
       makeBR
