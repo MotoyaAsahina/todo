@@ -1,5 +1,5 @@
 <template>
-  <div class="w-21rem h-full">
+  <div class="w-21rem h-full <sm:(snap-start snap-m-1.6)">
     <div
       style="width: 20.2rem; height: calc(100% - 1rem)"
       class="m-1.6 rounded-lg border-1 border-gray-200 bg-gray-50"

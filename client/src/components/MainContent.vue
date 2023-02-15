@@ -1,7 +1,7 @@
 <template>
   <div
     style="height: calc(100% - 3rem)"
-    class="w-full p-1.6 overflow-scroll flex"
+    class="w-full p-1.6 overflow-scroll flex <sm:(snap snap-mandatory snap-x)"
   >
     <template v-for="group in groups" :key="group.id">
       <task-panel
