@@ -4,13 +4,15 @@
       style="width: 20.2rem; height: calc(100% - 1rem)"
       class="m-1.6 rounded-lg border-1 border-gray-200 bg-gray-50"
     >
-      <div class="h-auto pt-2.4 pb-1.4 px-2 flex items-center relative">
+      <div class="h-8.8 pt-2.4 pb-1.4 px-2 flex items-center relative">
         <span
           class="w-auto px-1.4 h-4.4 flex-initial rounded-lg bg-gray-200 text-xs text-center leading-1.1rem"
         >
           {{ tasks?.length }}
         </span>
-        <h3 class="flex-1 pl-1.6 text-base font-semibold">{{ group.name }}</h3>
+        <h3 class="flex-1 pl-1.6 text-base font-semibold leading-1.1rem">
+          {{ group.name }}
+        </h3>
         <a @click="operateTaskEditor"><add-icon /></a>
         <a @click="operateMenu"><dots-icon class="ml-0.5" /></a>
 
@@ -68,7 +70,7 @@
       </div>
 
       <div
-        style="width: 100%; height: calc(100% - 2.3rem)"
+        style="width: 100%; height: calc(100% - 2.2rem)"
         class="px-1.6 overflow-scroll"
       >
         <template v-for="task in tasks" :key="task.id">
