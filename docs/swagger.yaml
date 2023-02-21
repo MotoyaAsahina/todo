@@ -167,6 +167,22 @@ paths:
       responses:
         "204":
           description: 正常に更新できました
+  /groups/{id}/order:
+    parameters:
+      - $ref: "#/components/parameters/id"
+    put:
+      operationId: putGroupOrder
+      tags:
+        - groups
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PutGroupOrder"
+        required: true
+      responses:
+        "204":
+          description: 正常に更新できました
 
   /tags:
     get:
@@ -348,6 +364,15 @@ components:
         - name
       example:
         name: "Group 1"
+    PutGroupOrder:
+      type: object
+      properties:
+        order:
+          type: integer
+      required:
+        - order
+      example:
+        order: 0
 
     Tags:
       type: array

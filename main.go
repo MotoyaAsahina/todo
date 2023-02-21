@@ -42,6 +42,7 @@ func main() {
 			apiGroups.DELETE("/:id", router.DeleteGroup)
 			apiGroups.PUT("/:id/up", router.PutGroupUp)
 			apiGroups.PUT("/:id/down", router.PutGroupDown)
+			apiGroups.PUT("/:id/order", router.PutGroupOrder)
 		}
 
 		apiTags := echoAPI.Group("/tags")

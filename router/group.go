@@ -10,6 +10,10 @@ type PostGroupRequest struct {
 	Name string `json:"name"`
 }
 
+type PutGroupOrderRequest struct {
+	Order int `json:"order"`
+}
+
 func GetGroups(c echo.Context) error {
 	groups, err := model.GetGroups(c.Request().Context())
 	if err != nil {
@@ -120,5 +124,69 @@ func PutGroupDown(c echo.Context) error {
 			return c.JSON(200, nil)
 		}
 	}
+	return c.JSON(200, nil)
+}
+
+func PutGroupOrder(c echo.Context) error {
+	id := uuid.MustParse(c.Param("id"))
+
+	req := new(PutGroupOrderRequest)
+	if err := c.Bind(req); err != nil {
+		return err
+	}
+
+	newOrder := req.Order
+
+	groups, err := model.GetGroups(c.Request().Context())
+	if err != nil {
+		return err
+	}
+
+	oldOrder := 0
+	for _, group := range groups {
+		if group.Id == id {
+			oldOrder = group.Order
+			break
+		}
+	}
+
+	if oldOrder == newOrder {
+		return c.JSON(200, nil)
+	}
+
+	if oldOrder < newOrder {
+		for _, group := range groups {
+			if group.Order <= newOrder && group.Order > oldOrder {
+				err = model.PutGroupOrder(c.Request().Context(), &model.Group{
+					Id:    group.Id,
+					Order: group.Order - 1,
+				})
+				if err != nil {
+					return err
+				}
+			}
+		}
+	} else {
+		for _, group := range groups {
+			if group.Order >= newOrder && group.Order < oldOrder {
+				err = model.PutGroupOrder(c.Request().Context(), &model.Group{
+					Id:    group.Id,
+					Order: group.Order + 1,
+				})
+				if err != nil {
+					return err
+				}
+			}
+		}
+	}
+
+	err = model.PutGroupOrder(c.Request().Context(), &model.Group{
+		Id:    id,
+		Order: newOrder,
+	})
+	if err != nil {
+		return err
+	}
+
 	return c.JSON(200, nil)
 }
