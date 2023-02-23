@@ -1,16 +1,13 @@
-# syntax = docker/dockerfile:experimental
-
 FROM golang:1.17.4-alpine as server-build
 WORKDIR /go/src/github.com/MotoyaAsahina/todo
 
 RUN apk add --update --no-cache gcc build-base
 
-COPY go.* .
-RUN --mount=type=cache,target=/go/pkg/mod/cache \
-  go mod download
+COPY go.* ./
+RUN go mod download
 
-COPY . .
-RUN go build -o /todo
+COPY . ./
+RUN go build -o /todo -ldflags '-w -s'
 
 
 FROM alpine:3.15.0
