@@ -1,10 +1,10 @@
-package middleware
+package router
 
 import (
 	"fmt"
-	"github.com/MotoyaAsahina/todo/model"
-	"github.com/labstack/echo/v4"
 	"net/http"
+
+	"github.com/labstack/echo/v4"
 )
 
 func getTokenID(c echo.Context) string {
@@ -15,9 +15,9 @@ func getTokenID(c echo.Context) string {
 	return cookie.Value
 }
 
-func EnsureAuthorized(next echo.HandlerFunc) echo.HandlerFunc {
+func (h *Handlers) EnsureAuthorized(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		permission, err := model.CertificateToken(c.Request().Context(), getTokenID(c))
+		permission, err := h.Repo.CertificateToken(c.Request().Context(), getTokenID(c))
 		if err != nil {
 			return echo.NewHTTPError(http.StatusInternalServerError, fmt.Errorf("failed to get permission: %v", err))
 		}

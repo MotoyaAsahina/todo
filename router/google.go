@@ -12,13 +12,8 @@ import (
 
 const googleState = "todo_auth_state"
 
-var (
-	config    *oauth2.Config
-	whiteList []string
-)
-
-func SetupGoogleOauth2() {
-	config = &oauth2.Config{
+func (h *Handlers) SetupGoogleOauth2() {
+	h.GoogleOAuthConfig = &oauth2.Config{
 		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
 		ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
 		RedirectURL:  os.Getenv("GOOGLE_REDIRECT_URL"),
@@ -26,19 +21,19 @@ func SetupGoogleOauth2() {
 		Endpoint:     google.Endpoint,
 	}
 
-	whiteList = strings.Split(os.Getenv("WHITE_LIST"), ",")
+	h.WhiteList = strings.Split(os.Getenv("WHITE_LIST"), ",")
 }
 
-func issueLoginURL() string {
-	return config.AuthCodeURL(googleState, oauth2.AccessTypeOffline)
+func (h *Handlers) issueLoginURL() string {
+	return h.GoogleOAuthConfig.AuthCodeURL(googleState, oauth2.AccessTypeOffline)
 }
 
-func getTokenFromCode(code string) (*oauth2.Token, error) {
-	return config.Exchange(context.Background(), code)
+func (h *Handlers) getTokenFromCode(code string) (*oauth2.Token, error) {
+	return h.GoogleOAuthConfig.Exchange(context.Background(), code)
 }
 
-func getGmailFromToken(token *oauth2.Token) (string, error) {
-	client := config.Client(context.Background(), token)
+func (h *Handlers) getGmailFromToken(token *oauth2.Token) (string, error) {
+	client := h.GoogleOAuthConfig.Client(context.Background(), token)
 	res, err := client.Get("https://www.googleapis.com/oauth2/v2/userinfo")
 	if err != nil {
 		return "", err

@@ -14,25 +14,25 @@ type PutGroupOrderRequest struct {
 	Order int `json:"order"`
 }
 
-func GetGroups(c echo.Context) error {
-	groups, err := model.GetGroups(c.Request().Context())
+func (h *Handlers) GetGroups(c echo.Context) error {
+	groups, err := h.Repo.GetGroups(c.Request().Context())
 	if err != nil {
 		return err
 	}
 	return c.JSON(200, groups)
 }
 
-func PostGroup(c echo.Context) error {
+func (h *Handlers) PostGroup(c echo.Context) error {
 	req := new(PostGroupRequest)
 	if err := c.Bind(req); err != nil {
 		return err
 	}
 
-	groups, err := model.GetGroups(c.Request().Context())
+	groups, err := h.Repo.GetGroups(c.Request().Context())
 	if err != nil {
 		return err
 	}
-	err = model.PostGroup(c.Request().Context(), &model.Group{
+	err = h.Repo.PostGroup(c.Request().Context(), &model.Group{
 		Id:    uuid.New(),
 		Name:  req.Name,
 		Order: len(groups),
@@ -43,13 +43,13 @@ func PostGroup(c echo.Context) error {
 	return c.JSON(200, nil)
 }
 
-func PutGroup(c echo.Context) error {
+func (h *Handlers) PutGroup(c echo.Context) error {
 	id := uuid.MustParse(c.Param("id"))
 	req := new(PostGroupRequest)
 	if err := c.Bind(req); err != nil {
 		return err
 	}
-	err := model.PutGroup(c.Request().Context(), &model.Group{
+	err := h.Repo.PutGroup(c.Request().Context(), &model.Group{
 		Id:   id,
 		Name: req.Name,
 	})
@@ -59,13 +59,13 @@ func PutGroup(c echo.Context) error {
 	return c.JSON(200, nil)
 }
 
-func DeleteGroup(c echo.Context) error {
+func (h *Handlers) DeleteGroup(c echo.Context) error {
 	return c.JSON(200, "DeleteGroup")
 }
 
-func PutGroupUp(c echo.Context) error {
+func (h *Handlers) PutGroupUp(c echo.Context) error {
 	id := uuid.MustParse(c.Param("id"))
-	groups, err := model.GetGroups(c.Request().Context())
+	groups, err := h.Repo.GetGroups(c.Request().Context())
 	if err != nil {
 		return err
 	}
@@ -75,14 +75,14 @@ func PutGroupUp(c echo.Context) error {
 			if i == 0 {
 				return c.JSON(200, nil)
 			}
-			err = model.PutGroupOrder(c.Request().Context(), &model.Group{
+			err = h.Repo.PutGroupOrder(c.Request().Context(), &model.Group{
 				Id:    id,
 				Order: group.Order - 1,
 			})
 			if err != nil {
 				return err
 			}
-			err = model.PutGroupOrder(c.Request().Context(), &model.Group{
+			err = h.Repo.PutGroupOrder(c.Request().Context(), &model.Group{
 				Id:    groups[i-1].Id,
 				Order: group.Order,
 			})
@@ -95,9 +95,9 @@ func PutGroupUp(c echo.Context) error {
 	return c.JSON(200, nil)
 }
 
-func PutGroupDown(c echo.Context) error {
+func (h *Handlers) PutGroupDown(c echo.Context) error {
 	id := uuid.MustParse(c.Param("id"))
-	groups, err := model.GetGroups(c.Request().Context())
+	groups, err := h.Repo.GetGroups(c.Request().Context())
 	if err != nil {
 		return err
 	}
@@ -107,14 +107,14 @@ func PutGroupDown(c echo.Context) error {
 			if i == len(groups)-1 {
 				return c.JSON(200, nil)
 			}
-			err = model.PutGroupOrder(c.Request().Context(), &model.Group{
+			err = h.Repo.PutGroupOrder(c.Request().Context(), &model.Group{
 				Id:    id,
 				Order: group.Order + 1,
 			})
 			if err != nil {
 				return err
 			}
-			err = model.PutGroupOrder(c.Request().Context(), &model.Group{
+			err = h.Repo.PutGroupOrder(c.Request().Context(), &model.Group{
 				Id:    groups[i+1].Id,
 				Order: group.Order,
 			})
@@ -127,7 +127,7 @@ func PutGroupDown(c echo.Context) error {
 	return c.JSON(200, nil)
 }
 
-func PutGroupOrder(c echo.Context) error {
+func (h *Handlers) PutGroupOrder(c echo.Context) error {
 	id := uuid.MustParse(c.Param("id"))
 
 	req := new(PutGroupOrderRequest)
@@ -137,7 +137,7 @@ func PutGroupOrder(c echo.Context) error {
 
 	newOrder := req.Order
 
-	groups, err := model.GetGroups(c.Request().Context())
+	groups, err := h.Repo.GetGroups(c.Request().Context())
 	if err != nil {
 		return err
 	}
@@ -157,7 +157,7 @@ func PutGroupOrder(c echo.Context) error {
 	if oldOrder < newOrder {
 		for _, group := range groups {
 			if group.Order <= newOrder && group.Order > oldOrder {
-				err = model.PutGroupOrder(c.Request().Context(), &model.Group{
+				err = h.Repo.PutGroupOrder(c.Request().Context(), &model.Group{
 					Id:    group.Id,
 					Order: group.Order - 1,
 				})
@@ -169,7 +169,7 @@ func PutGroupOrder(c echo.Context) error {
 	} else {
 		for _, group := range groups {
 			if group.Order >= newOrder && group.Order < oldOrder {
-				err = model.PutGroupOrder(c.Request().Context(), &model.Group{
+				err = h.Repo.PutGroupOrder(c.Request().Context(), &model.Group{
 					Id:    group.Id,
 					Order: group.Order + 1,
 				})
@@ -180,7 +180,7 @@ func PutGroupOrder(c echo.Context) error {
 		}
 	}
 
-	err = model.PutGroupOrder(c.Request().Context(), &model.Group{
+	err = h.Repo.PutGroupOrder(c.Request().Context(), &model.Group{
 		Id:    id,
 		Order: newOrder,
 	})
