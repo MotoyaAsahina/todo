@@ -11,3 +11,12 @@ type Repository interface {
 type GormRepository struct {
 	db *DB
 }
+
+func (repo *GormRepository) InitDB() error {
+	db, err := initDB()
+	if err != nil {
+		return err
+	}
+	repo.db = db
+	return nil
+}

@@ -3,10 +3,11 @@ package model
 import (
 	"context"
 	"fmt"
+	"os"
+
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"os"
 )
 
 type DB struct {
@@ -23,7 +24,7 @@ var tables = []interface{}{
 	&Notification{},
 }
 
-func InitDB() (*DB, error) {
+func initDB() (*DB, error) {
 	user := os.Getenv("MARIADB_USERNAME")
 	pass := os.Getenv("MARIADB_PASSWORD")
 	host := os.Getenv("MARIADB_HOSTNAME")

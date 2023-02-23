@@ -3,15 +3,12 @@ package model
 import (
 	"context"
 	"encoding/base64"
-	"gorm.io/gorm"
 	"time"
+
+	"gorm.io/gorm"
 )
 
-type TokenRepository struct {
-	db *DB
-}
-
-func (repo *TokenRepository) IssueToken(ctx context.Context, googleToken string) (*Token, error) {
+func (repo *GormRepository) IssueToken(ctx context.Context, googleToken string) (*Token, error) {
 	token := &Token{
 		TokenID: base64.RawURLEncoding.EncodeToString([]byte(time.Now().String() + googleToken)),
 	}
@@ -23,7 +20,7 @@ func (repo *TokenRepository) IssueToken(ctx context.Context, googleToken string)
 	return token, nil
 }
 
-func (repo *TokenRepository) CertificateToken(ctx context.Context, token string) (bool, error) {
+func (repo *GormRepository) CertificateToken(ctx context.Context, token string) (bool, error) {
 	err := repo.db.GetDB(ctx).First(&Token{TokenID: token}).Error
 	if err == gorm.ErrRecordNotFound {
 		return false, nil

@@ -3,16 +3,17 @@ package router
 import (
 	"context"
 	"fmt"
-	"github.com/MotoyaAsahina/todo/model"
-	"github.com/google/uuid"
-	"github.com/labstack/echo/v4"
-	"github.com/slack-go/slack"
 	"os"
 	"regexp"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/MotoyaAsahina/todo/model"
+	"github.com/google/uuid"
+	"github.com/labstack/echo/v4"
+	"github.com/slack-go/slack"
 )
 
 type PostTaskRequest struct {
@@ -36,13 +37,13 @@ type TaskResponse struct {
 	Tags        []uuid.UUID `json:"tags"`
 }
 
-func GetTasks(c echo.Context) error {
-	tasks, err := model.GetTasks(c.Request().Context())
+func (h *Handlers) GetTasks(c echo.Context) error {
+	tasks, err := h.Repo.GetTasks(c.Request().Context())
 	if err != nil {
 		return err
 	}
 
-	tagMap, err := model.GetTagMaps(c.Request().Context())
+	tagMap, err := h.Repo.GetTagMaps(c.Request().Context())
 	if err != nil {
 		return err
 	}
@@ -66,7 +67,7 @@ func GetTasks(c echo.Context) error {
 	return c.JSON(200, response)
 }
 
-func PostTask(c echo.Context) error {
+func (h *Handlers) PostTask(c echo.Context) error {
 	var req PostTaskRequest
 	if err := c.Bind(&req); err != nil {
 		return err
@@ -77,7 +78,7 @@ func PostTask(c echo.Context) error {
 		return err
 	}
 
-	task, err := model.PostTask(c.Request().Context(), &model.Task{
+	task, err := h.Repo.PostTask(c.Request().Context(), &model.Task{
 		ID:          uuid.New(),
 		GroupID:     req.GroupID,
 		Title:       req.Title,
@@ -96,14 +97,14 @@ func PostTask(c echo.Context) error {
 		})
 	}
 	if len(tagMaps) > 0 {
-		err = model.PostTagMaps(c.Request().Context(), tagMaps)
+		err = h.Repo.PostTagMaps(c.Request().Context(), tagMaps)
 		if err != nil {
 			return err
 		}
 	}
 
 	// notification
-	err = scheduleNotification(c.Request().Context(), task)
+	err = h.scheduleNotification(c.Request().Context(), task)
 	if err != nil {
 		return err
 	}
@@ -111,14 +112,14 @@ func PostTask(c echo.Context) error {
 	return c.JSON(200, task)
 }
 
-func PutTask(c echo.Context) error {
+func (h *Handlers) PutTask(c echo.Context) error {
 	var req PostTaskRequest
 	if err := c.Bind(&req); err != nil {
 		return err
 	}
 	id := uuid.MustParse(c.Param("id"))
 
-	registeredTagMaps, err := model.GetTagMapsByTaskID(c.Request().Context(), id)
+	registeredTagMaps, err := h.Repo.GetTagMapsByTaskID(c.Request().Context(), id)
 	registeredTags := make([]uuid.UUID, 0)
 	for _, tagMap := range registeredTagMaps {
 		registeredTags = append(registeredTags, tagMap.TagID)
@@ -155,7 +156,7 @@ func PutTask(c echo.Context) error {
 		return err
 	}
 
-	task, err := model.PutTask(c.Request().Context(), &model.Task{
+	task, err := h.Repo.PutTask(c.Request().Context(), &model.Task{
 		ID:          id,
 		Title:       req.Title,
 		Description: req.Description,
@@ -166,24 +167,24 @@ func PutTask(c echo.Context) error {
 	}
 
 	if len(newTags) > 0 {
-		err = model.PostTagMaps(c.Request().Context(), newTags)
+		err = h.Repo.PostTagMaps(c.Request().Context(), newTags)
 		if err != nil {
 			return err
 		}
 	}
 	if len(deletedTags) > 0 {
-		err = model.DeleteTagMaps(c.Request().Context(), deletedTags)
+		err = h.Repo.DeleteTagMaps(c.Request().Context(), deletedTags)
 		if err != nil {
 			return err
 		}
 	}
 
 	// notification
-	err = model.DeleteNotifications(c.Request().Context(), id)
+	err = h.Repo.DeleteNotifications(c.Request().Context(), id)
 	if err != nil {
 		return err
 	}
-	err = scheduleNotification(c.Request().Context(), task)
+	err = h.scheduleNotification(c.Request().Context(), task)
 	if err != nil {
 		return err
 	}
@@ -200,24 +201,24 @@ func isRegisteredTag(tagID uuid.UUID, registeredTags []uuid.UUID) bool {
 	return false
 }
 
-func DeleteTask(c echo.Context) error {
+func (h *Handlers) DeleteTask(c echo.Context) error {
 	id := uuid.MustParse(c.Param("id"))
 
-	err := model.DeleteTagMapsByTaskID(c.Request().Context(), id)
+	err := h.Repo.DeleteTagMapsByTaskID(c.Request().Context(), id)
 	if err != nil {
 		return err
 	}
 
-	err = model.DeleteTask(c.Request().Context(), id)
+	err = h.Repo.DeleteTask(c.Request().Context(), id)
 	if err != nil {
 		return err
 	}
 	return c.JSON(200, nil)
 }
 
-func PutTaskDone(c echo.Context) error {
+func (h *Handlers) PutTaskDone(c echo.Context) error {
 	id := uuid.MustParse(c.Param("id"))
-	err := model.PutTaskDone(c.Request().Context(), id)
+	err := h.Repo.PutTaskDone(c.Request().Context(), id)
 	if err != nil {
 		return err
 	}
@@ -225,11 +226,11 @@ func PutTaskDone(c echo.Context) error {
 	return c.JSON(200, nil)
 }
 
-func PutTaskUndone(c echo.Context) error {
+func (h *Handlers) PutTaskUndone(c echo.Context) error {
 	return c.JSON(200, "PutTaskUndone")
 }
 
-func scheduleNotification(ctx context.Context, task *model.Task) error {
+func (h *Handlers) scheduleNotification(ctx context.Context, task *model.Task) error {
 	notificationTimes, tags := getNotificationTimesFromDescription(task.Description, task.DueDate)
 	for i, t := range notificationTimes {
 		fromNow := t.Sub(time.Now())
@@ -237,7 +238,7 @@ func scheduleNotification(ctx context.Context, task *model.Task) error {
 			continue
 		}
 
-		alreadyTimeExists, err := model.SetNotification(ctx, task.ID, t, tags[i])
+		alreadyTimeExists, err := h.Repo.SetNotification(ctx, task.ID, t, tags[i])
 		if err != nil {
 			return err
 		}
@@ -246,7 +247,7 @@ func scheduleNotification(ctx context.Context, task *model.Task) error {
 			timer := time.NewTimer(fromNow)
 			go func() {
 				<-timer.C
-				notify()
+				h.notify()
 			}()
 		}
 	}
@@ -254,14 +255,14 @@ func scheduleNotification(ctx context.Context, task *model.Task) error {
 	return nil
 }
 
-func notify() {
-	notifications, err := model.GetLatestNotifications(context.Background())
+func (h *Handlers) notify() {
+	notifications, err := h.Repo.GetLatestNotifications(context.Background())
 	if err != nil {
 		postMessage("Error: "+err.Error(), 0)
 		return
 	}
 
-	groups, err := model.GetGroups(context.Background())
+	groups, err := h.Repo.GetGroups(context.Background())
 	if err != nil {
 		postMessage("Error: "+err.Error(), 0)
 		return
@@ -287,13 +288,13 @@ func notify() {
 	tasks := make([]formedTask, 0)
 
 	for _, notification := range notifications {
-		task, err := model.GetTask(context.Background(), notification.TaskID)
+		task, err := h.Repo.GetTask(context.Background(), notification.TaskID)
 		if err != nil {
 			postMessage("Error: "+err.Error(), 0)
 			return
 		}
 
-		tags, err := model.GetTagNamesByTaskID(context.Background(), task.ID)
+		tags, err := h.Repo.GetTagNamesByTaskID(context.Background(), task.ID)
 		if err != nil {
 			postMessage("Error: "+err.Error(), 0)
 			return
@@ -399,8 +400,8 @@ func getNotificationTimesFromDescription(description string, dueDate time.Time) 
 	return notificationTimes, resSlice
 }
 
-func ResetNotifications() {
-	notificationTimes, err := model.GetValidNotificationTimes(context.Background())
+func (h *Handlers) ResetNotifications() {
+	notificationTimes, err := h.Repo.GetValidNotificationTimes(context.Background())
 	if err != nil {
 		fmt.Printf("[ERROR: reset notifications] %s\n", err.Error())
 		return
@@ -410,14 +411,14 @@ func ResetNotifications() {
 		fromNow := t.Sub(time.Now())
 		if fromNow <= 0 {
 			// already passed
-			err = model.SetNotificationTimeNoticed(context.Background(), t)
+			err = h.Repo.SetNotificationTimeNoticed(context.Background(), t)
 			continue
 		}
 
 		timer := time.NewTimer(fromNow)
 		go func() {
 			<-timer.C
-			notify()
+			h.notify()
 		}()
 	}
 }

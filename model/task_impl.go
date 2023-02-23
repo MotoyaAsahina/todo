@@ -2,15 +2,12 @@ package model
 
 import (
 	"context"
-	"github.com/google/uuid"
 	"time"
+
+	"github.com/google/uuid"
 )
 
-type TaskRepository struct {
-	db *DB
-}
-
-func (repo *TaskRepository) GetTasks(ctx context.Context) ([]*Task, error) {
+func (repo *GormRepository) GetTasks(ctx context.Context) ([]*Task, error) {
 	var tasks []*Task
 	err := repo.db.GetDB(ctx).
 		Model(&Task{}).
@@ -20,13 +17,13 @@ func (repo *TaskRepository) GetTasks(ctx context.Context) ([]*Task, error) {
 	return tasks, err
 }
 
-func (repo *TaskRepository) GetTask(ctx context.Context, id uuid.UUID) (*Task, error) {
+func (repo *GormRepository) GetTask(ctx context.Context, id uuid.UUID) (*Task, error) {
 	var task Task
 	err := repo.db.GetDB(ctx).Where("id = ?", id).First(&task).Error
 	return &task, err
 }
 
-func (repo *TaskRepository) PutTaskDone(ctx context.Context, id uuid.UUID) error {
+func (repo *GormRepository) PutTaskDone(ctx context.Context, id uuid.UUID) error {
 	err := repo.db.GetDB(ctx).Model(&Task{ID: id}).Updates(map[string]interface{}{
 		"done":    true,
 		"done_at": time.Now(),
@@ -34,7 +31,7 @@ func (repo *TaskRepository) PutTaskDone(ctx context.Context, id uuid.UUID) error
 	return err
 }
 
-func (repo *TaskRepository) PutTask(ctx context.Context, task *Task) (*Task, error) {
+func (repo *GormRepository) PutTask(ctx context.Context, task *Task) (*Task, error) {
 	t := &Task{ID: task.ID}
 	err := repo.db.GetDB(ctx).Model(t).Updates(map[string]interface{}{
 		"title":       task.Title,
@@ -44,7 +41,7 @@ func (repo *TaskRepository) PutTask(ctx context.Context, task *Task) (*Task, err
 	return t, err
 }
 
-func (repo *TaskRepository) PostTask(ctx context.Context, task *Task) (*Task, error) {
+func (repo *GormRepository) PostTask(ctx context.Context, task *Task) (*Task, error) {
 	err := repo.db.GetDB(ctx).Create(task).Error
 	if err != nil {
 		return nil, err
@@ -52,7 +49,7 @@ func (repo *TaskRepository) PostTask(ctx context.Context, task *Task) (*Task, er
 	return task, nil
 }
 
-func (repo *TaskRepository) DeleteTask(ctx context.Context, id uuid.UUID) error {
+func (repo *GormRepository) DeleteTask(ctx context.Context, id uuid.UUID) error {
 	err := repo.db.GetDB(ctx).Delete(&Task{ID: id}).Error
 	return err
 }

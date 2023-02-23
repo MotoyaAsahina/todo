@@ -2,16 +2,13 @@ package model
 
 import (
 	"context"
+	"time"
+
 	"github.com/go-sql-driver/mysql"
 	"github.com/google/uuid"
-	"time"
 )
 
-type NotificationRepository struct {
-	db *DB
-}
-
-func (repo *NotificationRepository) SetNotification(ctx context.Context, taskID uuid.UUID, notificationTime time.Time, notificationTag string) (alreadyTimeExists bool, err error) {
+func (repo *GormRepository) SetNotification(ctx context.Context, taskID uuid.UUID, notificationTime time.Time, notificationTag string) (alreadyTimeExists bool, err error) {
 	normalTime := notificationTime.Add(-time.Duration(notificationTime.Second()) * time.Second)
 	err = repo.db.GetDB(ctx).Create(&NotificationTime{Time: normalTime}).Error
 
@@ -34,12 +31,12 @@ func (repo *NotificationRepository) SetNotification(ctx context.Context, taskID 
 	return
 }
 
-func (repo *NotificationRepository) DeleteNotifications(ctx context.Context, taskID uuid.UUID) error {
+func (repo *GormRepository) DeleteNotifications(ctx context.Context, taskID uuid.UUID) error {
 	err := repo.db.GetDB(ctx).Where("task_id = ?", taskID).Delete(&Notification{}).Error
 	return err
 }
 
-func (repo *NotificationRepository) GetLatestNotifications(ctx context.Context) ([]*Notification, error) {
+func (repo *GormRepository) GetLatestNotifications(ctx context.Context) ([]*Notification, error) {
 	var latestTime time.Time
 	err := repo.db.GetDB(ctx).
 		Model(&NotificationTime{}).
@@ -68,7 +65,7 @@ func (repo *NotificationRepository) GetLatestNotifications(ctx context.Context) 
 	return notifications, nil
 }
 
-func (repo *NotificationRepository) GetValidNotificationTimes(ctx context.Context) ([]time.Time, error) {
+func (repo *GormRepository) GetValidNotificationTimes(ctx context.Context) ([]time.Time, error) {
 	var notificationTimes []time.Time
 	err := repo.db.GetDB(ctx).
 		Model(&NotificationTime{}).
@@ -81,7 +78,7 @@ func (repo *NotificationRepository) GetValidNotificationTimes(ctx context.Contex
 	return notificationTimes, nil
 }
 
-func (repo *NotificationRepository) SetNotificationTimeNoticed(ctx context.Context, t time.Time) error {
+func (repo *GormRepository) SetNotificationTimeNoticed(ctx context.Context, t time.Time) error {
 	err := repo.db.GetDB(ctx).Model(&NotificationTime{Time: t}).Updates(map[string]interface{}{
 		"noticed": true,
 	}).Error

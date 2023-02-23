@@ -1,14 +1,16 @@
 package router
 
 import (
-	mid "github.com/MotoyaAsahina/todo/middleware"
 	"github.com/MotoyaAsahina/todo/model"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"golang.org/x/oauth2"
 )
 
 type Handlers struct {
-	Repo model.Repository
+	Repo              model.Repository
+	GoogleOAuthConfig *oauth2.Config
+	WhiteList         []string
 }
 
 func (h *Handlers) SetupRoutes() *echo.Echo {
@@ -17,41 +19,40 @@ func (h *Handlers) SetupRoutes() *echo.Echo {
 	e.Use(middleware.Logger())
 	e.Debug = true
 
-	router.SetupGoogleOauth2()
-	router.ResetNotifications()
+	e.GET("/login", h.GoogleLogin)
+	e.GET("/callback", h.GoogleCallback)
 
-	e.GET("/login", router.GoogleLogin)
-	e.GET("/callback", router.GoogleCallback)
-
-	api := e.Group("/api", mid.EnsureAuthorized)
+	api := e.Group("/api", h.EnsureAuthorized)
 	{
 		apiTasks := api.Group("/tasks")
 		{
-			apiTasks.GET("", router.GetTasks)
-			apiTasks.POST("", router.PostTask)
-			apiTasks.PUT("/:id", router.PutTask)
-			apiTasks.DELETE("/:id", router.DeleteTask)
-			apiTasks.PUT("/:id/done", router.PutTaskDone)
-			apiTasks.PUT("/:id/undone", router.PutTaskUndone)
+			apiTasks.GET("", h.GetTasks)
+			apiTasks.POST("", h.PostTask)
+			apiTasks.PUT("/:id", h.PutTask)
+			apiTasks.DELETE("/:id", h.DeleteTask)
+			apiTasks.PUT("/:id/done", h.PutTaskDone)
+			apiTasks.PUT("/:id/undone", h.PutTaskUndone)
 		}
 
 		apiGroups := api.Group("/groups")
 		{
-			apiGroups.GET("", router.GetGroups)
-			apiGroups.POST("", router.PostGroup)
-			apiGroups.PUT("/:id", router.PutGroup)
-			apiGroups.DELETE("/:id", router.DeleteGroup)
-			apiGroups.PUT("/:id/up", router.PutGroupUp)
-			apiGroups.PUT("/:id/down", router.PutGroupDown)
-			apiGroups.PUT("/:id/order", router.PutGroupOrder)
+			apiGroups.GET("", h.GetGroups)
+			apiGroups.POST("", h.PostGroup)
+			apiGroups.PUT("/:id", h.PutGroup)
+			apiGroups.DELETE("/:id", h.DeleteGroup)
+			apiGroups.PUT("/:id/up", h.PutGroupUp)
+			apiGroups.PUT("/:id/down", h.PutGroupDown)
+			apiGroups.PUT("/:id/order", h.PutGroupOrder)
 		}
 
 		apiTags := api.Group("/tags")
 		{
-			apiTags.GET("", router.GetTags)
-			apiTags.POST("", router.PostTag)
-			apiTags.PUT("/:id", router.PutTag)
-			apiTags.DELETE("/:id", router.DeleteTag)
+			apiTags.GET("", h.GetTags)
+			apiTags.POST("", h.PostTag)
+			apiTags.PUT("/:id", h.PutTag)
+			apiTags.DELETE("/:id", h.DeleteTag)
 		}
 	}
+
+	return e
 }
